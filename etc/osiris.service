@@ -1,0 +1,16 @@
+#
+# Fichier de demarrage de la detection des mouvement
+# ce fichier doit etre place dans /etc/systemd/system avec droit root:root 644
+
+[Unit]
+Description=Mouvement detection
+After=network.target
+[Service]
+Type=simple
+RemainAfterExit=yes
+Restart=always
+ExecStart=/home/pi/Osiris/bin/osiris.py
+WorkingDirectory=/home/pi/Osiris/
+User=pi
+[Install]
+WantedBy=multi-user.target
