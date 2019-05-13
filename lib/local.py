@@ -3,7 +3,7 @@
 
 bot_id      = 'XxxX'
 
-tmp_path    = '../tmp/video/'
+tmp_path    = 'tmp/video/'
 video_name       = 'intrusion_'
 selfie_name      = 'selfie.jpeg'
 
