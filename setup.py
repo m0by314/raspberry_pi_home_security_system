@@ -17,9 +17,9 @@ link_path = current_dir + '/' + local_service_path
 service_name = 'motion.service'
 service_path = '/etc/systemd/system/' + service_name
 
-properties = { '^ExecStart'         : ExecStart = 'ExecStart=' + current_dir + '/bin/motion.py',
-                '^WorkingDirectory' : WorkingDirectory = 'WorkingDirectory=' + current_dir,
-                '^User'             : User = 'User=' + current_user
+properties = { '^ExecStart'         : 'ExecStart=' + current_dir + '/bin/motion.py',
+                '^WorkingDirectory' : 'WorkingDirectory=' + current_dir,
+                '^User'             : 'User=' + current_user
               }
 
 #$ExecStart = 'ExecStart=' + $current_dir = 'bin/motion.py'
@@ -31,7 +31,8 @@ properties = { '^ExecStart'         : ExecStart = 'ExecStart=' + current_dir + '
 #sed($service, '^User', $User)
 
 for key in properties.keys():
-    sed(local_service_path,key,properties[key])
+    if sed(local_service_path,key,properties[key]) != 0 :
+        raise Exception('Error during sed in' + local_service_path )
 
 
 os.symlink(link_path, service_path)
