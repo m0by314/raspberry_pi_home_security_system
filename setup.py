@@ -2,6 +2,7 @@
 # installation script 
 import subprocess
 import os
+import getpass
 from lib.sed import sed
 
 #TODO format presentation
@@ -9,7 +10,7 @@ print('Welcome, the installation of the detection system will settle')
 
 
 current_dir = os.getcwd()
-current_user = os.getusername()
+current_user = getpass.getuser()
 
 
 local_service_path = 'etc/motion.service'
@@ -17,7 +18,7 @@ link_path = current_dir + '/' + local_service_path
 service_name = 'motion.service'
 service_path = '/etc/systemd/system/' + service_name
 
-properties = { '^ExecStart'         : 'ExecStart=' + current_dir + '/bin/motion.py',
+properties = { '^ExecStart'         : 'ExecStart=' + current_dir + '/motion.py',
                 '^WorkingDirectory' : 'WorkingDirectory=' + current_dir,
                 '^User'             : 'User=' + current_user
               }
