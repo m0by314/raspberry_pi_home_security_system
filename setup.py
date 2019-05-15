@@ -17,9 +17,9 @@ link_path = current_dir + '/' + local_service_path
 service_name = 'motion.service'
 service_path = '/etc/systemd/system/' + service_name
 
-properties = { '^ExecStart'         : ExecStart = 'ExecStart=' + $current_dir + '/bin/motion.py',
-                '^WorkingDirectory' : WorkingDirectory = 'WorkingDirectory=' + $current_dir,
-                '^User'             : User = 'User=' + $current_user
+properties = { '^ExecStart'         : ExecStart = 'ExecStart=' + current_dir + '/bin/motion.py',
+                '^WorkingDirectory' : WorkingDirectory = 'WorkingDirectory=' + current_dir,
+                '^User'             : User = 'User=' + current_user
               }
 
 #$ExecStart = 'ExecStart=' + $current_dir = 'bin/motion.py'
@@ -36,10 +36,10 @@ for key in properties.keys():
 
 os.symlink(link_path, service_path)
 
-cmd = subprocess.run(["systemctl", "enable", $service_name], capture_output=True)
+cmd = subprocess.run(["systemctl", "enable", service_name], capture_output=True)
 if cmd.returncode != 0:
     raise Exception('Error during enable service')
     
-cmd = subprocess.run(["systemctl", "start", $service_name], capture_output=True)
+cmd = subprocess.run(["systemctl", "start", service_name], capture_output=True)
 if cmd.returncode != 0:
     raise Exception('Error during start service')    
