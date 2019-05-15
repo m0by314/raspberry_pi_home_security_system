@@ -21,17 +21,13 @@ def sed(file,motif,remplacement):
             except Exception as E :
                 raise E
                 err = 1
+                return err
         
         fin.close()
         fout.close()
         
         if ( err != 1 ) :
             shutil.move(tmpfile,file)
+    
+        return  err    
         
-        
-if __name__ == '__main__':
-    if (len(sys.argv) != 4):
-        print('Usage:')
-        print('\t' + sys.argv[0] + ' file motif remplacement')
-    else:   
-        sed(sys.argv[1],sys.argv[2],sys.argv[3])
