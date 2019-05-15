@@ -5,7 +5,7 @@ import subprocess
 import time
 
 from picamera  import PiCamera
-from .local    import video_path, selfie_path
+from .config    import video_path, selfie_path
 
 camera = PiCamera()
 

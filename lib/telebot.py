@@ -4,7 +4,7 @@
 
 import telepot
 from datetime    import timedelta
-from .local      import bot_id, tmp_path
+from .config      import bot_id, tmp_path
 from .camera     import selfie
 
 import time
