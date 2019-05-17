@@ -41,7 +41,16 @@ video_time = 20
    * Build systemd service motion.service with current directory   
    * Create link in  `/etc/systemd/system`    
    * Activate service at boot    
-   * Start service  
+   * Start service 
+   
+### Bot commands
+
+* /start launch the dectection  
+* /stop stop the detection  
+* /snap take a photo  
+* /status show status of the movement detection  
+* /help show help  
+* /clean remove all files in video folder  
   
 ## Built With
 
