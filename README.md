@@ -1,91 +1,54 @@
-# Motion detector  
+# Motion Sensor With RaspberryPi and Telegram Bot 
 
 How to use a Raspberry Pi to find out who’s been in your home! Make a motion detector that uses a motion sensor to trigger video recording via the Raspberry Pi Camera Module. The video is send on your smartphone by Telegram Bot 
 
-## Getting Started
-
- Smart Start add your token_id in lib/config.pl 
- 
-```
-bot_id      = 'Your_token_id'
-```
 
 ### Prerequisites
 
- Raspberry Pi Camera Module <br />
- PIR motion sensor module <br />
- 3 or more female-to-female jumper wires <br />
- Create a Telegram Bot <br />
+* Raspberry Pi Camera Module  
+* PIR motion sensor module   
+* 3 female-to-female jumper wires   
+* [Create a Telegram Bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot)   
+
+## Quick start
+
+ * Add the Python dependencies see Installing section   
+ * Add your token_id in `lib/config.pl`   
+ ```
+     bot_id      = 'Your_token_id'
+```
+ * Launch script `motion.py`  
+ 
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+Installing python3 dependencies  :   
 ```
-Give the example
+pip3 install -r requirement.txt
 ```
-
-And repeat
-
+Launch `setup.py` which root for create systemd service and start service 
 ```
-until finished
+./setup.py
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+### Details 
 
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+* By default, the duration of the video is set to 20s. If you want change this, you need to modify the video_time variable in `lib/config.py`    
 ```
-Give an example
+video_time = 20
 ```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
+* `setup.py` action :   
+   * Build systemd service motion.service with current directory   
+   * Create link in  `/etc/systemd/system`    
+   * Activate service at boot    
+   * Start service  
+  
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [gpiozero](https://pypi.org/project/gpiozero/)
+* [telepot](https://pypi.org/project/telepot/)  
+* [picamera](https://pypi.org/project/picamera/) 
 
-## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
-
-## Authors
-
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
 
