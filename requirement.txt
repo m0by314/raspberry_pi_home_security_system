@@ -1,15 +1,4 @@
-aiohttp==3.5.4
-async-timeout==3.0.1
-attrs==19.1.0
-chardet==3.0.4
-colorzero==1.1
+RPi.GPIO==0.6.5
 gpiozero==1.5.0
-idna==2.8
-idna-ssl==1.1.0
-multidict==4.5.2
 picamera==1.13
-pkg-resources==0.0.0
 telepot==12.7
-typing-extensions==3.7.2
-urllib3==1.25.2
-yarl==1.3.0
