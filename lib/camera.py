@@ -5,7 +5,7 @@ import subprocess
 import time
 
 from picamera  import PiCamera
-from .config    import video_path, selfie_path
+from .config    import video_path, selfie_path, video_time
 
 camera = PiCamera()
 
@@ -21,7 +21,7 @@ def start_record():
     file_mp4  = file + '.mp4'
 
     camera.start_recording(file_h264)
-    time.sleep(20)
+    time.sleep(video_time)
     camera.stop_recording()
 
     error = _convert_h264_to_mp4(file_h264, file)
