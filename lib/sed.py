@@ -5,7 +5,6 @@ import sys
 import shutil
 
 def sed(file,motif,remplacement):
-        regex = re.compile(motif)
         tmpfile = file + '.tmp'
         err = 0
  
