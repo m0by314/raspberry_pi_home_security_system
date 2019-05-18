@@ -30,9 +30,9 @@ Installing python3 dependencies  :
 ```
 pip3 install -r requirement.txt
 ```
-Launch `setup.py` which root for create systemd service and start service 
+Launch `setup.py` which sudo command for create systemd service and start service 
 ```
-./setup.py
+sudo ./setup.py
 ```
 
 ### Details 
