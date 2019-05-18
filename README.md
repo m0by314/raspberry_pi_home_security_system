@@ -17,7 +17,7 @@ How to use a Raspberry Pi to find out who’s been in your home! Make a motion d
  ```
      bot_id      = 'Your_token_id'
 ```
- * Launch script `motion.py`  
+ * Launch script `osiris.py`  
  
 
 ### Installing
