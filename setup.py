@@ -10,10 +10,10 @@ from lib.sed import sed
 
 print('Welcome, the installation of the detection system will settle')
 
-if os.environ['SUDO_USER'] in os.environ:
+if 'SUDO_USER' in os.environ:
     user = os.environ['SUDO_USER']
 else:
-    sys.exit('The setup script has not launch with sudo commands')
+    sys.exit('The setup script has not launch with sudo command')
 
 current_dir         = os.getcwd()
 script_name         = 'osiris.py'
