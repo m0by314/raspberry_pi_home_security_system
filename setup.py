@@ -3,15 +3,19 @@
 
 import subprocess
 import os
+import sys
 import getpass
 from lib.sed import sed
 
 
 print('Welcome, the installation of the detection system will settle')
 
+if os.environ['SUDO_USER'] in os.environ:
+    user = os.environ['SUDO_USER']
+else:
+    sys.exit('The setup script has not launch with sudo commands')
 
 current_dir         = os.getcwd()
-current_user        = getpass.getuser()
 script_name         = 'osiris.py'
 local_service_path  = 'etc/osiris.service'
 service_name        = 'osiris.service'
@@ -20,7 +24,7 @@ link_path           = current_dir + '/' + local_service_path
 
 properties = { '^ExecStart=.*'         : 'ExecStart=' + current_dir + '/' + script_name,
                 '^WorkingDirectory=.*' : 'WorkingDirectory=' + current_dir,
-                '^User=.*'             : 'User=' + current_user
+                '^User=.*'             : 'User=' + user
             }
 
 cmd = { "enable" : { 'args' : ["systemctl", "enable", service_name],
