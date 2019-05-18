@@ -12,7 +12,7 @@ How to use a Raspberry Pi to find out who’s been in your home! Make a motion d
 
 ### Connect the PIR sensor
 
-![image](img/pir_diagram.png)
+![image](img/pir-diagram.png)
 
 ## Quick start
 
