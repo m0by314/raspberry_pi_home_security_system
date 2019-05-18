@@ -12,9 +12,9 @@ print('Welcome, the installation of the detection system will settle')
 
 current_dir         = os.getcwd()
 current_user        = getpass.getuser()
-script_name         = 'motion.py'
-local_service_path  = 'etc/motion.service'
-service_name        = 'motion.service'
+script_name         = 'osiris.py'
+local_service_path  = 'etc/osiris.service'
+service_name        = 'osiris.service'
 service_path        = '/etc/systemd/system/' + service_name
 link_path           = current_dir + '/' + local_service_path
 
