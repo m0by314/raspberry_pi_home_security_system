@@ -8,7 +8,11 @@ How to use a Raspberry Pi to find out who’s been in your home! Make a motion d
 * Raspberry Pi Camera Module  
 * PIR motion sensor module   
 * 3 female-to-female jumper wires   
-* [Create a Telegram Bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot)   
+* [Create a Telegram Bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot)  
+
+### Connect the PIR sensor
+
+![image](img/pir_diagram.png)
 
 ## Quick start
 
