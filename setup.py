@@ -33,6 +33,9 @@ cmd = { "enable" : { 'args' : ["systemctl", "enable", service_name],
         "start"  : { 'args' : ["systemctl", "start", service_name],
                      'err'  : 'Error during start service'
                     },
+       "status"  : { 'args' : ["systemctl", "status", service_name],
+                     'err'  : 'Error during status service'
+                    },
     }
 
 def build_service():
