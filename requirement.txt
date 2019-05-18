@@ -2,3 +2,4 @@ RPi.GPIO==0.6.5
 gpiozero==1.5.0
 picamera==1.13
 telepot==12.7
+urllib3==1.19.1
