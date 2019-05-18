@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#!/usr/bin/env python3
 # installation script 
 
 import subprocess
@@ -12,12 +12,13 @@ print('Welcome, the installation of the detection system will settle')
 
 current_dir         = os.getcwd()
 current_user        = getpass.getuser()
+script_name         = 'motion.py'
 local_service_path  = 'etc/motion.service'
-link_path           = current_dir + '/' + local_service_path
 service_name        = 'motion.service'
 service_path        = '/etc/systemd/system/' + service_name
+link_path           = current_dir + '/' + local_service_path
 
-properties = { '^ExecStart=.*'         : 'ExecStart=' + current_dir + '/motion.py',
+properties = { '^ExecStart=.*'         : 'ExecStart=' + current_dir + '/' + script_name,
                 '^WorkingDirectory=.*' : 'WorkingDirectory=' + current_dir,
                 '^User=.*'             : 'User=' + current_user
             }
