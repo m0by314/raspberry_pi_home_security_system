@@ -5,25 +5,14 @@ import time
 
 #from lib.telebot import chat_listen, send_video, handle, bot
 #from lib.camera import Camera
-from lib.config import chat_id
+from lib.config import bot_id
 #c = Camera()
-#pir = MotionSensor(4)
-import lib.telepot
+#pir = MotionSensor(4
+from lib.telebot import Telepot
 
-bot = Telepot(chat_id)
+bot = Telepot(bot_id)
 
 print ('I am listening ...')
-"""
-try:
-    while True:
-            if is_listening:
-               # if pir.motion_detected:
-                   # print ("Motion")
-                   # c.send_video(c.start_record())
-                else :
-                    time.sleep(1)
-            else:
-                time.sleep(1)
 
-except KeyboardInterrupt:
-""""
+while True:
+    time.sleep(1)

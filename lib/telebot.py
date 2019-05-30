@@ -3,27 +3,27 @@
 ### Fonction for using Telegram bot
 
 import telepot
-from datetime    import timedelta
-from .config      import bot_id, tmp_path
-from .camera     import selfie
+#from datetime    import timedelta
+#from .config      import bot_id, tmp_path
+#from .camera     import selfie
 
 
 class Telepot:
     def __init__(self,bot_id) :
         self.bot = telepot.Bot(bot_id)
         self.chat_listen = {}
-        self.bot.message_loop(self.handle())
+        self.bot.message_loop(self.handle)
         
     
     def __islisten(self):
         if self.chat_id in self.chat_listen:
             return True
-        else
+        else:
             self.chat_listen[self.chat_id] = True
             return False
         
     def handle(self,msg):
-        self.chat_id = msg['chat']['id]
+        self.chat_id = msg['chat']['id']
         self.command = msg['text']
         
         if self.command == '/start':
@@ -34,7 +34,7 @@ class Telepot:
                                    
         elif self.command == '/stop':
             if self.__listen():
-                bot.sendMessage(chat_id, "Listening Motion stop"))
+                bot.sendMessage(chat_id, "Listening Motion stop")
             else:
                 bot.sendMessage(chat_id, "Listen Motion doesn't run")
                                    
