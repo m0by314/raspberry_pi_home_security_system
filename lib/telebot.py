@@ -7,6 +7,37 @@ from datetime    import timedelta
 from .config      import bot_id, tmp_path
 from .camera     import selfie
 
+
+class Telepot:
+    def __init__(self,bot_id) :
+        self.bot = telepot.Bot(bot_id)
+        self.chat_listen = {}
+    
+    def __islisten(self):
+        if self.chat_id in self.chat_listen:
+            return True
+        else
+            self.chat_listen[self.chat_id] = True
+            return False
+        
+    def handle(self,msg):
+        self.chat_id = msg['chat']['id]
+        self.command = msg['text']
+        
+        if self.command == '/start':
+            if __islisten() : 
+                self.bot.sendMessage(self.chat_id, "Listen Motion is already use")
+            else :
+                self.bot.sendMessage(self.chat_id, "Listen Motion start")     
+                                   
+        elif self.command == '/stop':
+            if __listen():
+                bot.sendMessage(chat_id, "Listening Motion stop"))
+            else:
+                bot.sendMessage(chat_id, "Listen Motion doesn't run")
+                                   
+                                   
+"""                                
 import time
 import subprocess
 
@@ -15,9 +46,7 @@ chat_listen = {}
 
 
 def handle(msg):
-    """
-    parse commands
-    """
+   
     global chat_id
     chat_id = msg['chat']['id']
     command = msg['text']
@@ -106,3 +135,4 @@ def send_video(vid):
             bot.sendVideo(chat_id, video=open(val, 'rb'), caption='Motion Detected')
         else:
             bot.sendMessage(chat_id, val)
+"""
