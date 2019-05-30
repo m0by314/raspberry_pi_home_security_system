@@ -12,6 +12,8 @@ class Telepot:
     def __init__(self,bot_id) :
         self.bot = telepot.Bot(bot_id)
         self.chat_listen = {}
+        self.bot.message_loop(self.handle())
+        
     
     def __islisten(self):
         if self.chat_id in self.chat_listen:
@@ -25,13 +27,13 @@ class Telepot:
         self.command = msg['text']
         
         if self.command == '/start':
-            if __islisten() : 
+            if self.__islisten() : 
                 self.bot.sendMessage(self.chat_id, "Listen Motion is already use")
             else :
                 self.bot.sendMessage(self.chat_id, "Listen Motion start")     
                                    
         elif self.command == '/stop':
-            if __listen():
+            if self.__listen():
                 bot.sendMessage(chat_id, "Listening Motion stop"))
             else:
                 bot.sendMessage(chat_id, "Listen Motion doesn't run")
