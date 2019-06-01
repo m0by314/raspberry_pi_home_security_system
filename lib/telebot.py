@@ -3,6 +3,7 @@
 ### Fonction for using Telegram bot
 
 import telepot
+import subprocess
 #from datetime    import timedelta
 #from .config      import bot_id, tmp_path
 #from .camera     import selfie
@@ -14,7 +15,6 @@ class Telepot:
         self.chat_listen = {}
         self.bot.message_loop(self.handle)
         
-    
     def __islisten(self):
         if self.chat_id in self.chat_listen:
             return True
@@ -33,12 +33,57 @@ class Telepot:
                 self.bot.sendMessage(self.chat_id, "Listen Motion start")     
                                    
         elif self.command == '/stop':
-            if self.__listen():
-                bot.sendMessage(chat_id, "Listening Motion stop")
+            if self.__islisten():
+                self.bot.sendMessage(self.chat_id, "Listening Motion stop")
             else:
-                bot.sendMessage(chat_id, "Listen Motion doesn't run")
+                self.bot.sendMessage(self.chat_id, "Listen Motion doesn't run")
                                    
-                                   
+        elif self.command == '/status':
+            if self.__islisten():
+                self.bot.sendMessage(self.chat_id, "Bot is running")
+            else:
+                self.bot.sendMessage(self.chat_id, "Bot doesn't run")
+         
+        elif self.command == '/help':
+            return self.help()
+        
+        elif self.command == '/snap':
+            if self.__islisten() : 
+                self.bot.sendMessage(self.chat_id, "Take a photo")
+                self.bot.sendPhoto(self.chat_id, photo=open(camera.selfie(), 'rb'), caption='photo')
+            else :
+                self.bot.sendMessage(self.chat_id, "Listen Motion not start")     
+        
+        elif self.command == '/clean':
+            bot.sendMessage(chat_id, self._remove())              
+        
+
+    def usage(self):
+        str =  "command usage:\n"
+        str += "\t/start launch the dectection\n"
+        str += "\t/stop stop the detection\n"
+        str += "\t/snap take a photo\n"
+        str += "\t/status show status of the movement detection\n"
+        str += "\t/help show help\n"
+        str += "\t/clean remove all files in video folder\n"
+        print(str)
+        
+    def _remove():
+        command ="cd "+ tmp_path + " && rm *"
+
+        try:
+            output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+        except subprocess.CalledProcessError as e:
+            status = 'FAIL:\ncmd:{}\noutput:{}'.format(e.cmd, e.output)
+            return status
+        else :
+            status = 'files removed'
+            return status
+        
+        
+    def send_video():
+        pass
+        
 """                                
 import time
 import subprocess
@@ -86,8 +131,7 @@ def handle(msg):
         if ( chat_id not in chat_listen ) or ( chat_listen[chat_id] == False ):
             bot.sendMessage(chat_id, "Bot doesn't run")
         else:
-            bot.sendMessage(chat_id, "Take a photo")
-            bot.sendPhoto(chat_id, photo=open(selfie(), 'rb'), caption='photo')
+            
 
     elif command == '/status':
 
