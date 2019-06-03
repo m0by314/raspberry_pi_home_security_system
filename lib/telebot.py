@@ -21,7 +21,7 @@ class Telepot:
         else:
             self.chat_listen[self.chat_id] = True
             return False
-        
+
     def handle(self,msg):
         self.chat_id = msg['chat']['id']
         self.command = msg['text']
@@ -68,17 +68,21 @@ class Telepot:
         str += "\t/clean remove all files in video folder\n"
         print(str)
         
+    def gestion_erreur(func):
+        def func_wrapper(*args, **kwargs)
+            try:
+                return func(*args, **kwargs)
+             except Exception as e:
+                print(e)
+                return None
+        return func_wrapper
+
+    @gestion_erreur
     def _remove():
         command ="cd "+ tmp_path + " && rm *"
-
-        try:
-            output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-        except subprocess.CalledProcessError as e:
-            status = 'FAIL:\ncmd:{}\noutput:{}'.format(e.cmd, e.output)
-            return status
-        else :
-            status = 'files removed'
-            return status
+        output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+        status = 'files removed'
+        return status
         
         
     def send_video():
