@@ -5,7 +5,6 @@ import subprocess
 import time
 
 from picamera  import PiCamera
-from .config    import video_path, selfie_path, video_time
 
 class Camera:
     def __init__(self,video_path,video_time=20):
@@ -31,7 +30,7 @@ class Camera:
             return { 1 : error }
 
 
-    def _convert_h264_to_mp4(self,self.file_h264, self.file_mp4):
+    def _convert_h264_to_mp4(self):
         """
         convert format h264 in mp4
         return error message if convertion is in fail
@@ -46,6 +45,6 @@ class Camera:
         else:
             return 0
 
-    def selfie():
-        sefl.camera.capture(selfie_path)
-        return selfie_path
+    def selfie(self):
+        self.camera.capture(self.selfie_path)
+        return self.selfie_path
