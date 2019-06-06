@@ -4,13 +4,21 @@
 
 import telepot
 import subprocess
+import camera
 
 class Telepot:
     def __init__(self,bot_id) :
+        self.camera = None
         self.bot = telepot.Bot(bot_id)
         self.chat_listen = {}
         self.bot.message_loop(self.handle)
-        
+       
+    def camera(self):
+        if self.camera is None:
+            self.camera = camera.Camera()
+            
+        return self.camera
+ 
     def __islisten(self):
         if self.chat_id in self.chat_listen:
             return True
@@ -45,7 +53,7 @@ class Telepot:
         elif self.command == '/snap':
             if self.__islisten() : 
                 self.bot.sendMessage(self.chat_id, "Take a photo")
-                self.bot.sendPhoto(self.chat_id, photo=open(camera.selfie(), 'rb'), caption='photo')
+                self.bot.sendPhoto(self.chat_id, photo=open(self.camera.selfie(), 'rb'), caption='photo')
             else :
                 self.bot.sendMessage(self.chat_id, "Listen Motion not start")     
         
@@ -72,16 +80,13 @@ class Telepot:
         else :
             status = 'files removed'
             return status      
+    
+    @staticmethod    
+    def send_video(vid):
+        for key, val in vid.items():
+            if key == 0:
+                bot.sendVideo(chat_id, video=open(val, 'rb'), caption='Motion Detected')
+            else:
+                bot.sendMessage(chat_id, val)
         
-    def send_video():
-        pass
-        
-"""
-def send_video(vid):
 
-    for key, val in vid.items():
-        if key == 0:
-            bot.sendVideo(chat_id, video=open(val, 'rb'), caption='Motion Detected')
-        else:
-            bot.sendMessage(chat_id, val)
-"""
