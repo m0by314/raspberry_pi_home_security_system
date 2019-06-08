@@ -4,8 +4,8 @@
 import subprocess
 import os
 import sys
-import getpass
-from lib.sed import sed
+
+from bin.sed import sed
 
 
 print('Welcome, the installation of the detection system will settle')

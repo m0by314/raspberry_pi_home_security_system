@@ -2,10 +2,5 @@
 # Variable definition file
 
 bot_id      = 'Your_token_id'
+video_path  = 'tmp/video'
 video_time  = 20
-tmp_path    = 'tmp/video/'
-video_name  = 'intrusion_'
-selfie_name = 'selfie.jpeg'
-video_path  = tmp_path + video_name
-selfie_path = tmp_path + selfie_name
-

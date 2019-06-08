@@ -3,17 +3,20 @@
 
 import subprocess
 import time
+import os
 
-from picamera  import PiCamera
+from picamera import PiCamera
+
 
 class Camera:
-    def __init__(self,video_path,video_time=20):
-        self.camera     = PiCamera()
-        self.file       = video_path + time.strftime("%H%M%S-%Y%m%d")
-        self.file_h264  = self.file + '.h264'
-        self.file_mp4   = self.file + '.mp4'
+    def __init__(self, video_path, video_time=20):
+        self.camera = PiCamera()
+        self.file = os.path.join(video_path, 'intrusion-' + time.strftime("%H%M%S-%Y%m%d"))
+        self.selfie_name = os.path.join(video_path, 'selfie.jpeg')
+        self.file_h264 = self.file + '.h264'
+        self.file_mp4 = self.file + '.mp4'
         self.video_time = video_time
-        
+
     def start_record(self):
         """
         start record during 20s,
@@ -23,12 +26,11 @@ class Camera:
         time.sleep(self.video_time)
         self.camera.stop_recording()
 
-        error = self._convert_h264_to_mp4(self.file_h264, self.file_mp4)
+        error = self._convert_h264_to_mp4()
         if error == 0:
-            return { 0 : self.file_mp4 }
+            return {0: self.file_mp4}
         else:
-            return { 1 : error }
-
+            return {1: error}
 
     def _convert_h264_to_mp4(self):
         """
@@ -46,5 +48,5 @@ class Camera:
             return 0
 
     def selfie(self):
-        self.camera.capture(self.selfie_path)
-        return self.selfie_path
+        self.camera.capture(self.selfie_name)
+        return self.selfie_name
