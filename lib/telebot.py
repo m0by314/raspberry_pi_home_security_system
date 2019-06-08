@@ -7,7 +7,7 @@ import camera
 
 class Telepot:
     """
-    Class for create telebot
+    Class for using telegram bot with telepot
     """
 
     def __init__(self, bot_id, video_path):
@@ -19,7 +19,10 @@ class Telepot:
         self.chat_id = None
         self.command = None
 
-    def camera(self):
+    def _camera(self):
+        """
+        create camera instance
+        """
         if self.camera is None:
             self.camera = camera.Camera()
 
@@ -30,6 +33,9 @@ class Telepot:
             return True
 
     def handle(self, msg):
+        """
+        parse command send by bot
+        """
         self.chat_id = msg['chat']['id']
         self.command = msg['text']
 
@@ -59,7 +65,7 @@ class Telepot:
         elif self.command == '/snap':
             if self.__islisten():
                 self.bot.sendMessage(self.chat_id, "Take a photo")
-                self.bot.sendPhoto(self.chat_id, photo=open(self.camera.selfie(), 'rb'), caption='photo')
+                self.bot.sendPhoto(self.chat_id, photo=open(self._camera.selfie(), 'rb'), caption='photo')
             else:
                 self.bot.sendMessage(self.chat_id, "Listen Motion not start")
 

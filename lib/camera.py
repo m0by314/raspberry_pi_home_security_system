@@ -1,5 +1,4 @@
 #! /usr/bin/python3
-# Lib for camera action
 
 import subprocess
 import time
@@ -7,8 +6,10 @@ import os
 
 from picamera import PiCamera
 
-
 class Camera:
+    """
+    Class for using picamera
+    """
     def __init__(self, video_path, video_time=20):
         self.camera = PiCamera()
         self.file = os.path.join(video_path, 'intrusion-' + time.strftime("%H%M%S-%Y%m%d"))
