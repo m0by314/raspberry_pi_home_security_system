@@ -1,6 +1,5 @@
 #! /usr/bin/python3
 
-
 import telepot
 import subprocess
 import camera
