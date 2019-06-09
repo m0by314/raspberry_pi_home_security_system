@@ -19,16 +19,16 @@ class Telepot:
         self.chat_id = None
         self.command = None
 
-    def _camera(self):
+    def __camera(self):
         """
         create camera instance
         """
         if self.camera is None:
-            self.camera = camera.Camera()
+            self.camera = camera.Camera() #TODO add args
 
         return self.camera
 
-    def __islisten(self):
+    def islisten(self):
         if self.chat_id in self.chat_listen:
             return True
 
@@ -40,21 +40,21 @@ class Telepot:
         self.command = msg['text']
 
         if self.command == '/start':
-            if self.__islisten():
+            if self.islisten():
                 self.bot.sendMessage(self.chat_id, "Listen Motion is already use")
             else:
                 self.bot.sendMessage(self.chat_id, "Listen Motion start")
                 self.chat_listen[self.chat_id] = True
 
         elif self.command == '/stop':
-            if self.__islisten():
+            if self.islisten():
                 self.bot.sendMessage(self.chat_id, "Listening Motion stop")
                 self.chat_listen[self.chat_id] = None
             else:
                 self.bot.sendMessage(self.chat_id, "Listen Motion doesn't run")
 
         elif self.command == '/status':
-            if self.__islisten():
+            if self.islisten():
                 self.bot.sendMessage(self.chat_id, "Bot is running")
             else:
                 self.bot.sendMessage(self.chat_id, "Bot doesn't run")
@@ -63,7 +63,7 @@ class Telepot:
             return self.usage()
 
         elif self.command == '/snap':
-            if self.__islisten():
+            if self.islisten():
                 self.bot.sendMessage(self.chat_id, "Take a photo")
                 self.bot.sendPhoto(self.chat_id, photo=open(self._camera.selfie(), 'rb'), caption='photo')
             else:
