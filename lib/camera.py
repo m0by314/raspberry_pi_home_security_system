@@ -41,7 +41,7 @@ class Camera:
 
         command = "MP4Box -add {} {}.mp4".format(self.file_h264, self.file_mp4)
         try:
-            output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+            subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as error:
             err = 'FAIL:\ncmd:{}\noutput:{}'.format(error.cmd, error.output)
             return err
@@ -51,3 +51,6 @@ class Camera:
     def selfie(self):
         self.camera.capture(self.selfie_name)
         return self.selfie_name
+
+    
+    #TODO destroy methode
