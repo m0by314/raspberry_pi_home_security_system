@@ -14,7 +14,3 @@ class Motion(Camera):
         if self.pir.motion_detected:
             print("Motion")
             self.start_record()
-         
-       
-            
-    
