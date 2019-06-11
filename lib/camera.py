@@ -27,13 +27,13 @@ class Camera:
         time.sleep(self.video_time)
         self.camera.stop_recording()
 
-        error = self._convert_h264_to_mp4()
+        error = self.__convert_h264_to_mp4()
         if error == 0:
             return {0: self.file_mp4}
         else:
             return {1: error}
 
-    def _convert_h264_to_mp4(self):
+    def __convert_h264_to_mp4(self):
         """
         convert format h264 in mp4
         return error message if convertion is in fail
@@ -52,5 +52,5 @@ class Camera:
         self.camera.capture(self.selfie_name)
         return self.selfie_name
 
-    
-    #TODO destroy methode
+    def __del__(self):
+        self.camera.close()
