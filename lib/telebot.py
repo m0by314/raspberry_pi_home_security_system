@@ -2,31 +2,21 @@
 
 import telepot
 import subprocess
-import camera
+from camera import Camera
 
 
-class Telepot:
+class Telepot(Camera) :
     """
     Class for using telegram bot with telepot
     """
-
+    
     def __init__(self, bot_id, video_path):
-        self.camera = None
+        super().__init__()
         self.bot = telepot.Bot(bot_id)
         self.chat_listen = {}
         self.bot.message_loop(self.handle)
-        self.video_path = video_path
         self.chat_id = None
         self.command = None
-
-    def __camera(self):
-        """
-        create camera instance
-        """
-        if self.camera is None:
-            self.camera = camera.Camera() #TODO add args
-
-        return self.camera
 
     def islisten(self):
         if self.chat_id in self.chat_listen:
@@ -65,7 +55,7 @@ class Telepot:
         elif self.command == '/snap':
             if self.islisten():
                 self.bot.sendMessage(self.chat_id, "Take a photo")
-                self.bot.sendPhoto(self.chat_id, photo=open(self._camera.selfie(), 'rb'), caption='photo')
+                self.bot.sendPhoto(self.chat_id, photo=open(self.selfie(), 'rb'), caption='photo')
             else:
                 self.bot.sendMessage(self.chat_id, "Listen Motion not start")
 
@@ -81,7 +71,7 @@ class Telepot:
         str += "\t/status show status of the movement detection\n"
         str += "\t/help show help\n"
         str += "\t/clean remove all files in video folder\n"
-        print(str)
+        return str
 
     def _remove(self):
         command = "cd " + self.video_path + " && rm *"
