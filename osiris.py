@@ -7,15 +7,18 @@ from lib.config import bot_id ,video_path, video_time
 from lib.telebot import Telepot
 from lib.pir import Motion
 
-bot = Telepot(bot_id, video_path)
 cam = Camera(video_path, video_time)
-pir = Motion()
+bot = Telepot(bot_id,cam)
+pir = Motion(cam)
 
 print('I am listening ...')
 
-#TODO build loop
-while True:
-    if bot.islisten:
-        pir.dectection()
-     else:
-        time.sleep(1)
+
+try:
+    while True:
+        if bot.islisten:
+            pir.dectection()
+        else:
+            time.sleep(1)
+except KeyboardInterrupt:
+    del cam
