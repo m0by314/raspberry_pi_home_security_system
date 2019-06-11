@@ -10,7 +10,7 @@ class Telepot(Camera) :
     Class for using telegram bot with telepot
     """
     
-    def __init__(self, bot_id, video_path):
+    def __init__(self, bot_id):
         super().__init__()
         self.bot = telepot.Bot(bot_id)
         self.chat_listen = {}
