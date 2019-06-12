@@ -2,21 +2,20 @@
 
 import telepot
 import subprocess
-from camera import Camera
 
-
-class Telepot(Camera) :
+class Telepot() :
     """
     Class for using telegram bot with telepot
     """
     
-    def __init__(self, bot_id):
+    def __init__(self, bot_id, cam):
         super().__init__()
         self.bot = telepot.Bot(bot_id)
         self.chat_listen = {}
         self.bot.message_loop(self.handle)
         self.chat_id = None
         self.command = None
+        self.camera = cam
 
     def islisten(self):
         if self.chat_id in self.chat_listen:
