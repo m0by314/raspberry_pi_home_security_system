@@ -6,6 +6,7 @@ import os
 
 from picamera import PiCamera
 
+
 class Camera:
     """
     Class for using picamera
