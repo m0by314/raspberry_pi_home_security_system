@@ -3,10 +3,12 @@
 import telepot
 import subprocess
 
-class Telepot():
+
+class Telepot:
     """
     Class for using telegram bot with telepot
-    """ 
+    """
+
     def __init__(self, bot_id, cam):
         super().__init__()
         self.bot = telepot.Bot(bot_id)
@@ -53,7 +55,7 @@ class Telepot():
         elif self.command == '/snap':
             if self.islisten():
                 self.bot.sendMessage(self.chat_id, "Take a photo")
-                self.bot.sendPhoto(self.chat_id, photo=open(self.selfie(), 'rb'), caption='photo')
+                self.bot.sendPhoto(self.chat_id, photo=open(self.camera.selfie(), 'rb'), caption='photo')
             else:
                 self.bot.sendMessage(self.chat_id, "Listen Motion not start")
 
@@ -72,7 +74,8 @@ class Telepot():
         return str
 
     def _remove(self):
-        command = "cd " + self.video_path + " && rm *"
+        # TODO build getter for video path
+        command = "cd " + self.camera.getvid_path + " && rm *"
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as e:
@@ -83,7 +86,7 @@ class Telepot():
             return status
 
     def send_video(self, vid):
-        #TODO revoir le passage de la video camera.start_record
+        # TODO revoir le passage de la video camera.start_record
         for key, val in vid.items():
             if key == 0:
                 self.bot.sendVideo(self.chat_id, video=open(val, 'rb'), caption='Motion Detected')

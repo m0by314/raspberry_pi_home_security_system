@@ -17,7 +17,7 @@ print('I am listening ...')
 try:
     while True:
         if bot.islisten:
-            pir.dectection()
+            pir.detection()
         else:
             time.sleep(1)
 except KeyboardInterrupt:
