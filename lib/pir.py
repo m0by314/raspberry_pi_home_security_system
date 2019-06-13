@@ -2,8 +2,6 @@
 
 from gpiozero import MotionSensor
 
-pir = MotionSensor(4)
-
 class Motion():
     def __init__(self, cam):
         self.pir = MotionSensor(4)
