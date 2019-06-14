@@ -86,7 +86,7 @@ class Telepot:
             return status
 
     def send_video(self, vid):
-        # TODO revoir le passage de la video camera.start_record
+        # TODO revoir le passage de la video camera.start_record. 
         for key, val in vid.items():
             if key == 0:
                 self.bot.sendVideo(self.chat_id, video=open(val, 'rb'), caption='Motion Detected')
