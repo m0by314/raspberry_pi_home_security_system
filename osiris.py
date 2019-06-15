@@ -9,7 +9,7 @@ from lib.pir import Motion
 
 cam = Camera(video_path, video_time)
 bot = Telepot(bot_id, cam)
-pir = Motion(cam)
+pir = Motion()
 
 print('I am listening ...')
 
@@ -17,7 +17,7 @@ print('I am listening ...')
 try:
     while True:
         if bot.islisten() and pir.detection():
-            cam.start_record()
+            bot.send_video(cam.start_record())
         else:
             time.sleep(1)
 except KeyboardInterrupt:

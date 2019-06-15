@@ -40,7 +40,7 @@ class Camera:
         convert format h264 in mp4
         return error message if convertion is in fail
         """
-        command = "MP4Box -add {} {}.mp4".format(self.file_h264, self.file_mp4)
+        command = "MP4Box -add {} {}".format(self.file_h264, self.file_mp4)
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as error:

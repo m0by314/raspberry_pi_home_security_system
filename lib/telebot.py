@@ -10,7 +10,6 @@ class Telepot:
     """
 
     def __init__(self, bot_id, cam):
-        super().__init__()
         self.bot = telepot.Bot(bot_id)
         self.chat_listen = {}
         self.bot.message_loop(self.handle)
@@ -89,7 +88,6 @@ class Telepot:
             return status
 
     def send_video(self, vid):
-        # TODO revoir le passage de la video camera.start_record. 
         for key, val in vid.items():
             if key == 0:
                 self.bot.sendVideo(self.chat_id, video=open(val, 'rb'), caption='Motion Detected')
