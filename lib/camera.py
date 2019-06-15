@@ -14,7 +14,7 @@ class Camera:
 
     def __init__(self, video_path, video_time=20):
         self.camera = PiCamera()
-        self.file = os.path.join(video_path, 'intrusion-' + time.strftime("%H%M%S-%Y%m%d"))
+        self.file = os.path.join(video_path, 'intrusion-' + time.strftime("%H%M%S-%Y%m%d")) # TODO ne pas initialiser ici
         self.selfie_name = os.path.join(video_path, 'selfie.jpeg')
         self.file_h264 = self.file + '.h264'
         self.file_mp4 = self.file + '.mp4'
