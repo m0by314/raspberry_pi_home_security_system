@@ -11,4 +11,4 @@ class Motion:
     def detection(self):
         if self.pir.motion_detected:
             print("Motion")
-            self.camera.start_record()
+            #self.camera.start_record()

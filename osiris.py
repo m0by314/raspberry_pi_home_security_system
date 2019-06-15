@@ -3,12 +3,12 @@
 import time
 
 from lib.camera import Camera
-from lib.config import bot_id ,video_path, video_time
+from lib.config import bot_id, video_path, video_time
 from lib.telebot import Telepot
 from lib.pir import Motion
 
 cam = Camera(video_path, video_time)
-bot = Telepot(bot_id,cam)
+bot = Telepot(bot_id, cam)
 pir = Motion(cam)
 
 print('I am listening ...')
@@ -16,7 +16,7 @@ print('I am listening ...')
 
 try:
     while True:
-        if bot.islisten:
+        if bot.islisten():
             pir.detection()
         else:
             time.sleep(1)

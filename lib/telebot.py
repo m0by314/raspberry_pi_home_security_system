@@ -21,6 +21,8 @@ class Telepot:
     def islisten(self):
         if self.chat_id in self.chat_listen:
             return True
+        else:
+            return False
 
     def handle(self, msg):
         """
@@ -50,7 +52,7 @@ class Telepot:
                 self.bot.sendMessage(self.chat_id, "Bot doesn't run")
 
         elif self.command == '/help':
-            return self.usage()
+            self.bot.sendMessage(self.chat_id, self.usage())
 
         elif self.command == '/snap':
             if self.islisten():
@@ -64,6 +66,7 @@ class Telepot:
 
     @staticmethod
     def usage():
+
         str = "command usage:\n"
         str += "\t/start launch the dectection\n"
         str += "\t/stop stop the detection\n"
