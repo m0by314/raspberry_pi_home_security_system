@@ -16,8 +16,8 @@ print('I am listening ...')
 
 try:
     while True:
-        if bot.islisten():
-            pir.detection()
+        if bot.islisten() and pir.detection():
+            cam.start_record()
         else:
             time.sleep(1)
 except KeyboardInterrupt:
