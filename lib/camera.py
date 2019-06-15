@@ -14,10 +14,8 @@ class Camera:
 
     def __init__(self, video_path, video_time=20):
         self.camera = PiCamera()
-        self.file = os.path.join(video_path, 'intrusion-' + time.strftime("%H%M%S-%Y%m%d")) # TODO ne pas initialiser ici
+        self.path = video_path
         self.selfie_name = os.path.join(video_path, 'selfie.jpeg')
-        self.file_h264 = self.file + '.h264'
-        self.file_mp4 = self.file + '.mp4'
         self.video_time = video_time
 
     def start_record(self):
@@ -25,6 +23,10 @@ class Camera:
         start record during 20s,
         return video name at mp4 format or error if convert fail
         """
+        self.file = os.path.join(self.path, 'intrusion-' + time.strftime("%H%M%S-%Y%m%d"))
+        self.file_h264 = self.file + '.h264'
+        self.file_mp4 = self.file + '.mp4'
+
         self.camera.start_recording(self.file_h264)
         time.sleep(self.video_time)
         self.camera.stop_recording()
