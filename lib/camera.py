@@ -50,7 +50,11 @@ class Camera:
             return err
         else:
             return 0
-
+    
+    @property
+    def getvid_path(self):
+        return self.path
+    
     def selfie(self):
         self.camera.capture(self.selfie_name)
         return self.selfie_name
