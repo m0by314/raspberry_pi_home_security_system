@@ -19,7 +19,8 @@ class Telepot:
 
 
     def islisten(self):
-        if self.chat_listen[self.chat_id] == True:
+        if self.chat_id in self.chat_listen:
+            print(self.chat_listen[self.chat_id])
             return True
         else:
             return False
@@ -41,7 +42,7 @@ class Telepot:
         elif self.command == '/stop':
             if self.islisten:
                 self.bot.sendMessage(self.chat_id, "Listening Motion stop")
-                self.chat_listen[self.chat_id] = None
+                del self.chat_listen[self.chat_id"] 
             else:
                 self.bot.sendMessage(self.chat_id, "Listen Motion doesn't run")
 
