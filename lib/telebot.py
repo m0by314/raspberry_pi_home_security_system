@@ -17,8 +17,9 @@ class Telepot:
         self.command = None
         self.camera = cam
 
+
     def islisten(self):
-        if self.chat_id in self.chat_listen:
+        if self.chat_listen[self.chat_id] == True:
             return True
         else:
             return False
@@ -31,21 +32,21 @@ class Telepot:
         self.command = msg['text']
 
         if self.command == '/start':
-            if self.islisten():
+            if self.islisten:
                 self.bot.sendMessage(self.chat_id, "Listen Motion is already use")
             else:
                 self.bot.sendMessage(self.chat_id, "Listen Motion start")
                 self.chat_listen[self.chat_id] = True
 
         elif self.command == '/stop':
-            if self.islisten():
+            if self.islisten:
                 self.bot.sendMessage(self.chat_id, "Listening Motion stop")
                 self.chat_listen[self.chat_id] = None
             else:
                 self.bot.sendMessage(self.chat_id, "Listen Motion doesn't run")
 
         elif self.command == '/status':
-            if self.islisten():
+            if self.islisten:
                 self.bot.sendMessage(self.chat_id, "Bot is running")
             else:
                 self.bot.sendMessage(self.chat_id, "Bot doesn't run")
@@ -54,7 +55,7 @@ class Telepot:
             self.bot.sendMessage(self.chat_id, self.usage())
 
         elif self.command == '/snap':
-            if self.islisten():
+            if self.islisten:
                 self.bot.sendMessage(self.chat_id, "Take a photo")
                 self.bot.sendPhoto(self.chat_id, photo=open(self.camera.selfie(), 'rb'), caption='photo')
             else:
@@ -76,7 +77,6 @@ class Telepot:
         return str
 
     def _remove(self):
-        # TODO build getter for video path
         command = "cd " + self.camera.getvid_path + " && rm *"
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
