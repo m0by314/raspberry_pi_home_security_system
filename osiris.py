@@ -13,7 +13,6 @@ pir = Motion()
 
 print('I am listening ...')
 
-
 try:
     while True:
         if bot.islisten() and pir.detection():
