@@ -15,9 +15,9 @@ else:
     sys.exit('The setup script has not launch with sudo command')
 
 current_dir = os.getcwd()
-prog = 'osiris.py'
-template = 'etc/osiris.service'
-service_name = 'osiris.service'
+prog = 'motion-detector.py'
+template = 'etc/motion-detector.service'
+service_name = 'motion-detector.service'
 service = '/etc/systemd/system/' + service_name
 link = current_dir + '/' + template
 

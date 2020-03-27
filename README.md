@@ -1,4 +1,4 @@
-# Motion Sensor With RaspberryPi and Telegram Bot 
+# Motion Detector With RaspberryPi and Telegram Bot 
 
 How to use a Raspberry Pi to find out who’s been in your home! Make a motion detector that uses a motion sensor to trigger video recording via the Raspberry Pi Camera Module. The video is send on your smartphone by Telegram Bot 
 
@@ -21,7 +21,7 @@ How to use a Raspberry Pi to find out who’s been in your home! Make a motion d
  ```
      bot_id      = 'Your_token_id'
 ```
- * Launch script `osiris.py`  
+ * Launch script `motion-detector.py`  
  
 
 ### Installing
@@ -42,7 +42,7 @@ sudo ./setup.py
 video_time = 20
 ```
 * `setup.py` action :   
-   * Build systemd service motion.service with current directory   
+   * Build systemd service motion-detector.service with current directory   
    * Create link in  `/etc/systemd/system`    
    * Activate service at boot    
    * Start service 
