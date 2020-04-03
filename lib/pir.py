@@ -1,9 +1,6 @@
-#! /usr/bin/python3
-
 from gpiozero import MotionSensor
 
-
-class Motion:
+class Motiondetector:
     def __init__(self):
         self.pir = MotionSensor(4)
 

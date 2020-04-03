@@ -1,11 +1,8 @@
-#! /usr/bin/python3
-
 import subprocess
 import time
 import os
 
 from picamera import PiCamera
-
 
 class Camera:
     """
@@ -61,3 +58,5 @@ class Camera:
 
     def __del__(self):
         self.camera.close()
+
+# TODO add method for delete video

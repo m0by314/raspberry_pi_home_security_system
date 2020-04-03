@@ -1,23 +1,23 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
 
 import time
 
 from lib.camera import Camera
 from lib.config import bot_id, video_path, video_time
 from lib.telebot import Telepot
-from lib.pir import Motion
+from lib.pir import Motiondetector
 
-cam = Camera(video_path, video_time)
+camera = Camera(video_path, video_time)
 bot = Telepot(bot_id, cam)
-pir = Motion()
+pir = Motiondetector()
 
 print('I am listening ...')
 
 try:
     while True:
         if bot.islisten() and pir.detection():
-            bot.send_video(cam.start_record())
+            bot.send_video(camera.start_record())
         else:
             time.sleep(1)
 except KeyboardInterrupt:
-    del cam
+    del camera

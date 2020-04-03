@@ -1,5 +1,3 @@
-#! /usr/bin/python3
-
 import telepot
 import subprocess
 
@@ -24,7 +22,7 @@ class Telepot:
             return True
         else:
             return False
-
+    # TODO use decorator
     def handle(self, msg):
         """
         parse command send by bot
@@ -77,6 +75,7 @@ class Telepot:
         str += "\t/clean remove all files in video folder\n"
         return str
 
+    # TODO supprimer cette methode
     def _remove(self):
         command = "cd " + self.camera.getvid_path + " && rm *"
         try:
