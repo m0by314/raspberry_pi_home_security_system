@@ -1,95 +1,80 @@
 import telepot
-import subprocess
-
+import collections
 
 class Telepot:
     """
-    Class for using telegram bot with telepot
+    The Telepot object use a telepot bot.
+    The management of the bot is done through the handle decorator
+        Example:
+            @bot.handle("/start")
+            def start_listen():
+                bot.is_listen = True
+                return str("Bot is listening")
+
+
+            @bot.handle("/stop")
+            def stop_listen():
+                 bot.is_listen = False
+                 return str("Bot isn't listening")
+
+    :param bot_id : the bot's token
+    :param
+
     """
 
-    def __init__(self, bot_id, cam):
+    def __init__(self, bot_id):
         self.bot = telepot.Bot(bot_id)
-        self.chat_listen = {}
-        self.bot.message_loop(self.handle)
+        self._handle = collections.defaultdict(list)
+        self.bot.message_loop(self._postreceive)
         self.chat_id = None
         self.command = None
-        self.camera = cam
+        self._islisten = False
 
+    @property
+    def is_listen(self):
+        return self._islisten
 
-    def islisten(self):
-        if self.chat_id in self.chat_listen:
-            print(self.chat_listen[self.chat_id])
-            return True
-        else:
-            return False
-    # TODO use decorator
-    def handle(self, msg):
+    @is_listen.setter
+    def is_listen(self, status):
+        self._islisten = status
+
+    def handle(self, rule):
         """
-        parse command send by bot
+        Decorator to create the bot commands
+        Add commands as a function in a dictionary
+
+        :param rule: The rule this handle will created
+        :return decorator:
+        """
+        def decorator(func):
+            self._handle[rule].append(func)
+            return func
+        return decorator
+
+    def _postreceive(self, msg):
+        """
+        callback from telepot.message_loop
+
+        :param msg: message received
         """
         self.chat_id = msg['chat']['id']
         self.command = msg['text']
 
-        if self.command == '/start':
-            if self.islisten:
-                self.bot.sendMessage(self.chat_id, "Listen Motion is already use")
+        for handle in self._handle.get(self.command, []):
+            if "photo" in self.command:
+                self.bot.sendPhoto(self.chat_id, photo=open(handle(), 'rb'), caption='photo')
             else:
-                self.bot.sendMessage(self.chat_id, "Listen Motion start")
-                self.chat_listen[self.chat_id] = True
+                self.bot.sendMessage(self.chat_id, handle())
 
-        elif self.command == '/stop':
-            if self.islisten:
-                self.bot.sendMessage(self.chat_id, "Listening Motion stop")
-                del self.chat_listen[self.chat_id"] 
-            else:
-                self.bot.sendMessage(self.chat_id, "Listen Motion doesn't run")
+    def send_video(self, video):
+        """
+        Send the video if there are no errors in the recording, otherwise send the error message.
 
-        elif self.command == '/status':
-            if self.islisten:
-                self.bot.sendMessage(self.chat_id, "Bot is running")
-            else:
-                self.bot.sendMessage(self.chat_id, "Bot doesn't run")
-
-        elif self.command == '/help':
-            self.bot.sendMessage(self.chat_id, self.usage())
-
-        elif self.command == '/snap':
-            if self.islisten:
-                self.bot.sendMessage(self.chat_id, "Take a photo")
-                self.bot.sendPhoto(self.chat_id, photo=open(self.camera.selfie(), 'rb'), caption='photo')
-            else:
-                self.bot.sendMessage(self.chat_id, "Listen Motion not start")
-
-        elif self.command == '/clean':
-            self.bot.sendMessage(self.chat_id, self._remove)
-
-    @staticmethod
-    def usage():
-
-        str = "command usage:\n"
-        str += "\t/start launch the dectection\n"
-        str += "\t/stop stop the detection\n"
-        str += "\t/snap take a photo\n"
-        str += "\t/status show status of the movement detection\n"
-        str += "\t/help show help\n"
-        str += "\t/clean remove all files in video folder\n"
-        return str
-
-    # TODO supprimer cette methode
-    def _remove(self):
-        command = "cd " + self.camera.getvid_path + " && rm *"
-        try:
-            subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-        except subprocess.CalledProcessError as e:
-            status = 'FAIL:\ncmd:{}\noutput:{}'.format(e.cmd, e.output)
-            return status
+        :param video: a dictionary containing the name of the video,
+                                the return code of the recording
+                                and the error message if recording fail
+        """
+        if video.return_code == 0:
+            self.bot.sendVideo(self.chat_id, video=open(video.name, 'rb'), caption='Motion Detected')
         else:
-            status = 'files removed'
-            return status
-
-    def send_video(self, vid):
-        for key, val in vid.items():
-            if key == 0:
-                self.bot.sendVideo(self.chat_id, video=open(val, 'rb'), caption='Motion Detected')
-            else:
-                self.bot.sendMessage(self.chat_id, val)
+            self.bot.sendMessage(self.chat_id, video.error)
