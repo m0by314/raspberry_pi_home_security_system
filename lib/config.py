@@ -1,6 +1,6 @@
 #! /usr/bin/python3
-# Variable definition file
+# Variable configuration file
 
-bot_id      = 'Your_token_id'
-video_path  = 'tmp/video'
-video_time  = 20
+bot_id = 'Your_token_id'
+registration_folder = 'tmp/video'
+video_time = 20
