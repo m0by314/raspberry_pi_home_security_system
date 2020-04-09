@@ -18,8 +18,6 @@ class Telepot:
                  return str("Bot isn't listening")
 
     :param bot_id : the bot's token
-    :param
-
     """
 
     def __init__(self, bot_id):
@@ -74,7 +72,7 @@ class Telepot:
                                 the return code of the recording
                                 and the error message if recording fail
         """
-        if video.return_code == 0:
-            self.bot.sendVideo(self.chat_id, video=open(video.name, 'rb'), caption='Motion Detected')
+        if video["return_code"] == 0:
+            self.bot.sendVideo(self.chat_id, video=open(video["name"], 'rb'), caption='Motion Detected')
         else:
-            self.bot.sendMessage(self.chat_id, video.error)
+            self.bot.sendMessage(self.chat_id, video["return_code"])

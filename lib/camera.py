@@ -4,59 +4,75 @@ import os
 
 from picamera import PiCamera
 
+
 class Camera:
     """
-    Class for using picamera
+    Class to interfaces with Raspberry Pi Camera module
+
+    :param registration_folder: folder path for video recording
+    :param video_time: recording time
     """
 
-    def __init__(self, video_path, video_time=20):
+    def __init__(self, registration_folder, video_time=20):
         self.camera = PiCamera()
-        self.path = video_path
-        self.selfie_name = os.path.join(video_path, 'selfie.jpeg')
+        self.registration_folder = registration_folder
+        self.photo = os.path.join(self.registration_folder, 'photo' + time.strftime("%H%M%S-%Y%m%d") + '.jpeg')
         self.video_time = video_time
+        self.record = {}
 
-    def start_record(self):
+    def start_recording(self):
         """
-        start record during 20s,
-        return video name at mp4 format or error if convert fail
+        Starts the recording of the video
+        :return: dictionary containing the name of the video and the return code of the recording.
         """
-        self.file = os.path.join(self.path, 'intrusion-' + time.strftime("%H%M%S-%Y%m%d"))
-        self.file_h264 = self.file + '.h264'
-        self.file_mp4 = self.file + '.mp4'
+        self.video = os.path.join(self.registration_folder, 'vid-' + time.strftime("%H%M%S-%Y%m%d"))
+        self.video_h264 = self.video + '.h264'
 
-        self.camera.start_recording(self.file_h264)
+        self.camera.start_recording(self.video_h264)
         time.sleep(self.video_time)
         self.camera.stop_recording()
 
         error = self.__convert_h264_to_mp4()
-        if error == 0:
-            return {0: self.file_mp4}
-        else:
-            return {1: error}
+        self.record = {
+            "name": self.file_mp4,
+            "return_code": error,
+        }
+        return self.record
 
     def __convert_h264_to_mp4(self):
         """
-        convert format h264 in mp4
-        return error message if convertion is in fail
+        Converted the video format h264 in mp4
+        return error message if conversion is in fail
         """
-        command = "MP4Box -add {} {}".format(self.file_h264, self.file_mp4)
+        self.video_mp4 = self.video + '.mp4'
+
+        command = "MP4Box -add {} {}".format(self.video_h264, self.video_mp4)
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
-        except subprocess.CalledProcessError as error:
-            err = 'FAIL:\ncmd:{}\noutput:{}'.format(error.cmd, error.output)
-            return err
+        except subprocess.CalledProcessError as err:
+            error = 'FAIL:\ncmd:{}\noutput:{}'.format(err.cmd, err.output)
+            return error
         else:
             return 0
-    
-    @property
-    def getvid_path(self):
-        return self.path
-    
-    def selfie(self):
-        self.camera.capture(self.selfie_name)
-        return self.selfie_name
+
+    def take_photo(self):
+        self.camera.capture(self.photo)
+        return self.photo
 
     def __del__(self):
         self.camera.close()
 
-# TODO add method for delete video
+    def purge_records(self):
+        """
+        Deletes records from the folder
+        :return: deletion result
+        """
+        command = "cd " + self.registration_folder + " && rm *"
+        try:
+            subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+        except subprocess.CalledProcessError as err:
+            result = 'FAIL:\ncmd:{}\noutput:{}'.format(err.cmd, err.output)
+            return result
+        else:
+            result = 'The records have been deleted'
+            return result
