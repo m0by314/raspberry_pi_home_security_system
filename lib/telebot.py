@@ -1,7 +1,8 @@
 import telepot
 import collections
 
-class Telepot:
+
+class Telebot(telepot.Bot):
     """
     The Telepot object use a telepot bot.
     The management of the bot is done through the handle decorator
@@ -21,9 +22,9 @@ class Telepot:
     """
 
     def __init__(self, bot_id):
-        self.bot = telepot.Bot(bot_id)
+        super().__init__(bot_id)
         self._handle = collections.defaultdict(list)
-        self.bot.message_loop(self._postreceive)
+        self.message_loop(self._postreceive)
         self.chat_id = None
         self.command = None
         self._islisten = False
@@ -36,7 +37,7 @@ class Telepot:
     def is_listen(self, status):
         self._islisten = status
 
-    def handle(self, rule):
+    def handler(self, rule):
         """
         Decorator to create the bot commands
         Add commands as a function in a dictionary
@@ -44,9 +45,11 @@ class Telepot:
         :param rule: The rule this handle will created
         :return decorator:
         """
+
         def decorator(func):
             self._handle[rule].append(func)
             return func
+
         return decorator
 
     def _postreceive(self, msg):
@@ -60,9 +63,9 @@ class Telepot:
 
         for handle in self._handle.get(self.command, []):
             if "photo" in self.command:
-                self.bot.sendPhoto(self.chat_id, photo=open(handle(), 'rb'), caption='photo')
+                self.sendPhoto(self.chat_id, photo=open(handle(), 'rb'), caption='photo')
             else:
-                self.bot.sendMessage(self.chat_id, handle())
+                self.sendMessage(self.chat_id, handle())
 
     def send_video(self, video):
         """
@@ -73,6 +76,6 @@ class Telepot:
                                 and the error message if recording fail
         """
         if video["return_code"] == 0:
-            self.bot.sendVideo(self.chat_id, video=open(video["name"], 'rb'), caption='Motion Detected')
+            self.sendVideo(self.chat_id, video=open(video["name"], 'rb'), caption='Motion Detected')
         else:
-            self.bot.sendMessage(self.chat_id, video["return_code"])
+            self.sendMessage(self.chat_id, video["return_code"])
