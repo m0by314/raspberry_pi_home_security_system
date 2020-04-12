@@ -4,29 +4,29 @@ import time
 
 from lib.camera import Camera
 from lib.config import bot_id, registration_folder, video_time
-from lib.telebot import Telepot
+from lib.telebot import Telebot
 from lib.pir import Motiondetector
 
 camera = Camera(registration_folder, video_time)
-bot = Telepot(bot_id, camera)
+bot = Telebot(bot_id)
 pir = Motiondetector()
 
 # handle configuration
 @bot.handle("/start")
 def on_start():
-    bot.is_start = True
+    bot.is_listen = True
     return str("Start Bot")
 
 
 @bot.handle("/stop")
 def on_stop():
-    bot.is_stop = False
+    bot.is_listen = False
     return str("Stop Bot")
 
 
 @bot.handle("/status")
 def on_status():
-    if bot.is_start:
+    if bot.is_listen:
         return str("Listening Motion run")
     else:
         return str("Listen Motion doesn't run")
@@ -56,7 +56,7 @@ def on_clean():
 print('I am listening ...')
 try:
     while True:
-        if bot.istart() and pir.detection():
+        if bot.listen and pir.movement_detected:
             bot.send_video(camera.start_recording())
         else:
             time.sleep(1)
