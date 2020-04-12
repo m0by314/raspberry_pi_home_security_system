@@ -12,31 +12,31 @@ bot = Telebot(bot_id)
 pir = Motiondetector()
 
 # handle configuration
-@bot.handle("/start")
+@bot.handler("/start")
 def on_start():
     bot.is_listen = True
     return str("Start Bot")
 
 
-@bot.handle("/stop")
+@bot.handler("/stop")
 def on_stop():
     bot.is_listen = False
     return str("Stop Bot")
 
 
-@bot.handle("/status")
+@bot.handler("/status")
 def on_status():
     if bot.is_listen:
         return str("Listening Motion run")
     else:
         return str("Listen Motion doesn't run")
 
-@bot.handle("/photo")
+@bot.handler("/photo")
 def on_photo():
     return camera.take_photo()
 
 
-@bot.handle("/help")
+@bot.handler("/help")
 def on_help():
     str = "command usage:\n"
     str += "\t/start launch the dectection\n"
@@ -48,7 +48,7 @@ def on_help():
     return str
 
 
-@bot.handle("/clean")
+@bot.handler("/clean")
 def on_clean():
     return camera.purge_records()
 
