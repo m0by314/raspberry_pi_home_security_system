@@ -66,6 +66,8 @@ class Telebot(telepot.Bot):
                 self.sendPhoto(self.chat_id, photo=open(handle(), 'rb'), caption='photo')
             else:
                 self.sendMessage(self.chat_id, handle())
+            return 0
+        return 1
 
     def send_video(self, video):
         """
