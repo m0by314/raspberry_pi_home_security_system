@@ -11,6 +11,7 @@ camera = Camera(registration_folder, video_time)
 bot = Telebot(bot_id)
 pir = Motiondetector()
 
+
 # handle configuration
 @bot.handler("/start")
 def on_start():
@@ -30,6 +31,7 @@ def on_status():
         return str("Listening Motion run")
     else:
         return str("Listen Motion doesn't run")
+
 
 @bot.handler("/photo")
 def on_photo():
@@ -56,9 +58,10 @@ def on_clean():
 print('I am listening ...')
 try:
     while True:
-        if bot.listen and pir.movement_detected:
+        if bot.is_listen:
             bot.send_video(camera.start_recording())
         else:
             time.sleep(1)
 except KeyboardInterrupt:
     del camera
+
