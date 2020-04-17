@@ -22,17 +22,6 @@ class test_config(unittest.TestCase):
         self.assertEqual(bot_id, 'Your_token_id', "the bot's token is not configured")
 
 
-if os.path.isfile('data.raw'):
-    with open('data.raw') as fp:
-        chat_id = fp.read()
-else:
-    chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
-        .json()['result'][0]['message']['chat']['id']
-    with open('data.raw', 'w') as fp:
-        fp.write(str(chat_id))
-fp.close()
-
-
 class TestBotMethods(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -105,4 +94,15 @@ class TestPir(unittest.TestCase):
 
 
 if __name__ == '__main__':
+
+    if os.path.isfile('data.raw'):
+        with open('data.raw') as fp:
+            chat_id = fp.read()
+    else:
+        chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
+            .json()['result'][0]['message']['chat']['id']
+        with open('data.raw', 'w') as fp:
+            fp.write(str(chat_id))
+    fp.close()
+
     unittest.main()
