@@ -27,20 +27,22 @@ class TestConfig(unittest.TestCase):
 class TestBotMethods(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        if os.path.isfile('data.raw'):
-            with open('data.raw') as fp:
-                cls.chat_id = fp.read()
-        else:
-            try:
-                cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
-                    .json()['result'][0]['message']['chat']['id']
-            except:
-                return "Cannot request API bot"
-            with open('data.raw', 'w') as fp:
-                fp.write(str(cls.chat_id))
-        fp.close()
         cls.response = requests.get("https://api.telegram.org/bot{TOKEN}/getMe".format(TOKEN=bot_id))
         cls.bot = Telebot(bot_id)
+
+    def setUp(self) -> None:
+        if os.path.isfile('data.raw'):
+            with open('data.raw') as fp:
+                self.chat_id = fp.read()
+        else:
+            try:
+                self.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
+                        .json()['result'][0]['message']['chat']['id']
+            except:
+                sys.exit(1)
+            with open('data.raw', 'w') as fp:
+                fp.write(str(self.chat_id))
+        fp.close()
 
     def test_query_url(self):
         self.assertEqual(self.response.status_code, 200, "Error: query url Telegram API Bot fail")
