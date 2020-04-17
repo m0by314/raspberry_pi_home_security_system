@@ -25,6 +25,15 @@ class test_config(unittest.TestCase):
 class TestBotMethods(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        if os.path.isfile('data.raw'):
+            with open('data.raw') as fp:
+                cls.chat_id = fp.read()
+        else:
+            cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
+                .json()['result'][0]['message']['chat']['id']
+            with open('data.raw', 'w') as fp:
+                fp.write(str(chat_id))
+        fp.close()
         cls.response = requests.get("https://api.telegram.org/bot{TOKEN}/getMe".format(TOKEN=bot_id))
         cls.bot = Telebot(bot_id)
 
@@ -50,7 +59,7 @@ class TestBotMethods(unittest.TestCase):
         def on_tests():
             return str("Test handler")
 
-        msg = {'message_id': 305, 'chat': {'id': chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
+        msg = {'message_id': 305, 'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
                'date': 1586725459, 'text': '/testsuite',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
         self.assertEqual(self.bot._postreceive(msg), 0, "Error: Handler")
@@ -60,7 +69,7 @@ class TestBotMethods(unittest.TestCase):
         def on_test_photo():
             return 'logo-ok.png'
 
-        msg = {'message_id': 305, 'chat': {'id': chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
+        msg = {'message_id': 305, 'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
                'date': 1586725459, 'text': '/photo',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
         self.assertEqual(self.bot._postreceive(msg), 0, "Error: Handler")
@@ -94,15 +103,4 @@ class TestPir(unittest.TestCase):
 
 
 if __name__ == '__main__':
-
-    if os.path.isfile('data.raw'):
-        with open('data.raw') as fp:
-            chat_id = fp.read()
-    else:
-        chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
-            .json()['result'][0]['message']['chat']['id']
-        with open('data.raw', 'w') as fp:
-            fp.write(str(chat_id))
-    fp.close()
-
     unittest.main()
