@@ -34,7 +34,7 @@ class TestBotMethods(unittest.TestCase):
             cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
                 .json()['result'][0]['message']['chat']['id']
             with open('data.raw', 'w') as fp:
-                fp.write(str(chat_id))
+                fp.write(str(cls.chat_id))
         fp.close()
         cls.response = requests.get("https://api.telegram.org/bot{TOKEN}/getMe".format(TOKEN=bot_id))
         cls.bot = Telebot(bot_id)
@@ -86,6 +86,7 @@ class TestCamera(unittest.TestCase):
 
     def test_recording(self):
         video = self.camera.start_recording()
+        print(video["return_code"])
         self.assertEqual(video["return_code"], 0, "ERROR: during recording video[\"return_code\"]")
 
     def test_take_photo(self):
