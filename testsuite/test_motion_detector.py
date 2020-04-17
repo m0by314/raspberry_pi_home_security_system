@@ -16,7 +16,7 @@ from lib.config import bot_id, registration_folder
 registration_folder = os.path.abspath('..') + '/' + registration_folder
 
 
-class test_config(unittest.TestCase):
+class TestConfig(unittest.TestCase):
     def test_registration_folder(self):
         self.assertTrue(os.path.exists(registration_folder), "Registration folder doesn't exist")
 
@@ -31,8 +31,11 @@ class TestBotMethods(unittest.TestCase):
             with open('data.raw') as fp:
                 cls.chat_id = fp.read()
         else:
-            cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
-                .json()['result'][0]['message']['chat']['id']
+            try:
+                cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
+                    .json()['result'][0]['message']['chat']['id']
+            except:
+                return "Cannot request API bot"
             with open('data.raw', 'w') as fp:
                 fp.write(str(cls.chat_id))
         fp.close()
@@ -84,6 +87,9 @@ class TestCamera(unittest.TestCase):
     def setUpClass(cls):
         cls.camera = Camera(registration_folder)
 
+    def setUp(self) -> None:
+        open(registration_folder + "tests.txt", 'a').close()
+
     def test_recording(self):
         video = self.camera.start_recording()
         print(video["return_code"])
@@ -94,7 +100,6 @@ class TestCamera(unittest.TestCase):
         self.assertTrue(os.path.isfile(photo))
 
     def test_purge_folder(self):
-        open(registration_folder + "tests.txt", 'a').close()
         self.assertEqual(self.camera.purge_records(), 'The records have been deleted', "Error: purge_record")
 
 
