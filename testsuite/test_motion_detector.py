@@ -14,14 +14,9 @@ from lib.pir import Motiondetector
 from lib.config import bot_id, registration_folder
 
 registration_folder = os.path.abspath('..') + '/' + registration_folder
-
-
-class TestConfig(unittest.TestCase):
-    def test_registration_folder(self):
-        self.assertTrue(os.path.exists(registration_folder), "Registration folder doesn't exist")
-
-    def test_bot_id(self):
-        self.assertNotEqual(bot_id, 'Your_token_id', "the bot's token is not configured")
+if not os.path.exists(registration_folder) or bot_id == 'Your_token_id':
+    print("lib/config.py doesn't configured")
+    sys.exit(1)
 
 
 class TestBotMethods(unittest.TestCase):
@@ -29,19 +24,14 @@ class TestBotMethods(unittest.TestCase):
     def setUpClass(cls):
         cls.response = requests.get("https://api.telegram.org/bot{TOKEN}/getMe".format(TOKEN=bot_id))
         cls.bot = Telebot(bot_id)
-
-    def setUp(self) -> None:
         if os.path.isfile('data.raw'):
             with open('data.raw') as fp:
-                self.chat_id = fp.read()
+                cls.chat_id = fp.read()
         else:
-            try:
-                self.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
-                        .json()['result'][0]['message']['chat']['id']
-            except:
-                sys.exit(1)
+            cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=bot_id)) \
+                    .json()['result'][0]['message']['chat']['id']
             with open('data.raw', 'w') as fp:
-                fp.write(str(self.chat_id))
+                fp.write(str(cls.chat_id))
         fp.close()
 
     def test_query_url(self):
