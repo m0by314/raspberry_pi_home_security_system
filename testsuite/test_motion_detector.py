@@ -13,13 +13,15 @@ from lib.camera import Camera
 from lib.pir import Motiondetector
 from lib.config import bot_id, registration_folder
 
+registration_folder = os.path.abspath('..') + '/' + registration_folder
+
 
 class test_config(unittest.TestCase):
     def test_registration_folder(self):
-        self.assertTrue(os.path.exists(registration_folder))
+        self.assertTrue(os.path.exists(registration_folder), "Registration folder doesn't exist")
 
     def test_bot_id(self):
-        self.assertEqual(bot_id, 'Your_token_id', "the bot's token is not configured")
+        self.assertNotEqual(bot_id, 'Your_token_id', "the bot's token is not configured")
 
 
 class TestBotMethods(unittest.TestCase):
@@ -59,7 +61,8 @@ class TestBotMethods(unittest.TestCase):
         def on_tests():
             return str("Test handler")
 
-        msg = {'message_id': 305, 'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
+        msg = {'message_id': 305,
+               'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
                'date': 1586725459, 'text': '/testsuite',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
         self.assertEqual(self.bot._postreceive(msg), 0, "Error: Handler")
@@ -69,7 +72,8 @@ class TestBotMethods(unittest.TestCase):
         def on_test_photo():
             return 'logo-ok.png'
 
-        msg = {'message_id': 305, 'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
+        msg = {'message_id': 305,
+               'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
                'date': 1586725459, 'text': '/photo',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
         self.assertEqual(self.bot._postreceive(msg), 0, "Error: Handler")
@@ -78,7 +82,7 @@ class TestBotMethods(unittest.TestCase):
 class TestCamera(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.camera = Camera(bot_id, registration_folder)
+        cls.camera = Camera(registration_folder)
 
     def test_recording(self):
         video = self.camera.start_recording()
@@ -89,7 +93,7 @@ class TestCamera(unittest.TestCase):
         self.assertTrue(os.path.isfile(photo))
 
     def test_purge_folder(self):
-        open("tests.txt", 'a').close()
+        open(registration_folder + "tests.txt", 'a').close()
         self.assertEqual(self.camera.purge_records(), 'The records have been deleted', "Error: purge_record")
 
 
