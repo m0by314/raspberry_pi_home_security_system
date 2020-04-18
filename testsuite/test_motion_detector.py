@@ -15,7 +15,7 @@ from lib.config import bot_id, registration_folder
 
 registration_folder = os.path.abspath('..') + '/' + registration_folder
 if not os.path.exists(registration_folder) or bot_id == 'Your_token_id':
-    print("lib/config.py doesn't configured")
+    print("Variables (registration_folder or bot_id) are not defined in lib/config.py")
     sys.exit(1)
 
 
@@ -35,21 +35,22 @@ class TestBotMethods(unittest.TestCase):
         fp.close()
 
     def test_query_url(self):
-        self.assertEqual(self.response.status_code, 200, "Error: query url Telegram API Bot fail")
+        self.assertEqual(self.response.status_code, 200, "Cannot query url Telegram API Bot fail")
 
     def test_bot_query(self):
-        self.assertEqual(self.bot.getMe(), self.response.json()['result'], "Error: bot query fail")
+        self.assertEqual(self.bot.getMe(), self.response.json()['result'], "The response of the Telebot class \
+                            and the Telegram url differs")
 
     def test_bot_status(self):
-        self.assertEqual(self.bot.is_listen, 0, "Error: Bot is listen")
+        self.assertEqual(self.bot.is_listen, 0, "Bot is listen")
 
     def test_set_start(self):
         self.bot.is_listen = True
-        self.assertEqual(self.bot.is_listen, 1, "Error: setter Bot.is_listen")
+        self.assertEqual(self.bot.is_listen, 1, "Cannot set Bot.is_listen to ON")
 
     def test_set_stop(self):
         self.bot.is_listen = False
-        self.assertEqual(self.bot.is_listen, 0, "Error: setter Bot.is_listen")
+        self.assertEqual(self.bot.is_listen, 0, "Cannot set Bot.is_listen to OFF")
 
     def test_handle(self):
         @self.bot.handler("/testsuite")
@@ -60,7 +61,7 @@ class TestBotMethods(unittest.TestCase):
                'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
                'date': 1586725459, 'text': '/testsuite',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
-        self.assertEqual(self.bot._postreceive(msg), 0, "Error: Handler")
+        self.assertEqual(self.bot._postreceive(msg), 0, "Handler doesn't function")
 
     def test_handler_photo(self):
         @self.bot.handler("/photo")
@@ -71,7 +72,7 @@ class TestBotMethods(unittest.TestCase):
                'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
                'date': 1586725459, 'text': '/photo',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
-        self.assertEqual(self.bot._postreceive(msg), 0, "Error: Handler")
+        self.assertEqual(self.bot._postreceive(msg), 0, "Handler photo doesn't function")
 
 
 class TestCamera(unittest.TestCase):
@@ -92,7 +93,7 @@ class TestCamera(unittest.TestCase):
         self.assertTrue(os.path.isfile(photo))
 
     def test_purge_folder(self):
-        self.assertEqual(self.camera.purge_records(), 'The records have been deleted', "Error: purge_record")
+        self.assertEqual(self.camera.purge_records(), 'The records have been deleted', "purge_record doesn't function")
 
 
 class TestPir(unittest.TestCase):
