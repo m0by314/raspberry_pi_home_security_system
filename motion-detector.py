@@ -58,7 +58,7 @@ def on_clean():
 print('I am listening ...')
 try:
     while True:
-        if bot.is_listen:
+        if bot.is_listen and pir.movement_detected():
             bot.send_video(camera.start_recording())
         else:
             time.sleep(1)
