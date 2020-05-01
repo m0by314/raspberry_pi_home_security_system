@@ -11,11 +11,11 @@ sys.path.insert(0, os.path.abspath('..') + '/lib')
 from lib.telebot import Telebot
 from lib.camera import Camera
 from lib.pir import Motiondetector
-from lib.config import bot_id, registration_folder
+from lib.config import bot_id
 
 
-if not os.path.exists(registration_folder) or bot_id == 'Your_token_id':
-    print("Variables (registration_folder or bot_id) are not defined in lib/config.py")
+if not bot_id == 'Your_token_id':
+    print("Variable bot_id is not defined in lib/config.py")
     sys.exit(1)
 
 
@@ -78,10 +78,7 @@ class TestBotMethods(unittest.TestCase):
 class TestCamera(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.camera = Camera(registration_folder)
-
-    def setUp(self) -> None:
-        open(registration_folder + "tests.txt", 'a').close()
+        cls.camera = Camera()
 
     def test_recording(self):
         video = self.camera.start_recording()

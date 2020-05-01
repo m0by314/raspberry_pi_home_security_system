@@ -3,11 +3,11 @@
 import time
 
 from lib.camera import Camera
-from lib.config import bot_id, registration_folder, video_time
+from lib.config import bot_id, video_time
 from lib.telebot import Telebot
 from lib.pir import Motiondetector
 
-camera = Camera(registration_folder, video_time)
+camera = Camera(video_time)
 bot = Telebot(bot_id)
 pir = Motiondetector()
 
