@@ -1,4 +1,4 @@
-.PHONY: help prepare-env test lint install
+.PHONY: help test lint install
 
 .DEFAULT: help
 
@@ -9,12 +9,8 @@ LINK := /etc/systemd/system/${SERVICE}.service
 
 SHELL := /bin/bash
 
-VENV_NAME?=venv
-VENV_ACTIVATE=. $(VENV_NAME)/bin/activate
-PYTHON=${VENV_NAME}/bin/python3
-
 help:
-	@echo "make prepare-env"; \
+	@echo "make prepare"; \
     echo "       prepare virtual environment, use only once"; \
     echo "make test"; \
     echo "       run tests"; \
@@ -23,7 +19,7 @@ help:
     echo "make install"; \
     echo "       install software"; \
 
-install: install-deps build-service
+install: prepare build-service
 	echo "Welcome, the installation of the detection system will settle"; \
 
 build_service:
@@ -34,28 +30,14 @@ build_service:
 	systemctl enable ${LINK}; \
 	systemctl start ${LINK}; \
 
-prepare-env:
-	sudo apt-get -y install python python3-pip
-	python3 -m pip install virtualenv
-	make venv
+prepare:
+	sudo apt-get -y install python python3-pip gpac; \
+	pip install -r requirements.txt; \
 
-
-venv: $(VENV_NAME)/bin/activate
-$(VENV_NAME)/bin/activate:
-	test -d $(VENV_NAME) || virtualenv -p python3 $(VENV_NAME)
-	${PYTHON} -m pip install -U pip
-	${PYTHON} -m pip install -e .
-	. venv/bin/activate
-	touch $(VENV_NAME)/bin/activate
-
-install-deps: venv
-	apt-get install gpac; \
-	pip install -r requirements.txt
-
-test: venv
+test:
 	${PYTHON} -m pytest
 
-lint: venv
+pylint:
 	${PYTHON} -m pylint *
 
 
