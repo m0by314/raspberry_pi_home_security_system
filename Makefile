@@ -48,7 +48,7 @@ install-deps:
 test:
 	${PYTHON} -m pytest
 
-clean: cleandeps
+clean: clean-deps
 	@-echo "-----------------"; \
 	echo "--- Uninstall ---"; \
 	@echo "-----------------"; \
