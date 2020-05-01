@@ -1,45 +1,52 @@
-.PHONY: help test lint install
+.PHONY: help test install clean
 
 .DEFAULT: help
 
 CURPWD  := $(shell pwd)
 
-SERVICE:= $(CURPWD)/etc/motion-detector
-LINK := /etc/systemd/system/${SERVICE}.service
+SERVICE_NAME := motion-detector.service
+
+SERVICE := etc/${SERVICE_NAME}
+SERVICE_TEMPLATE = etc/${SERVICE_NAME}.template
+
+SERVICE_ABSPATH = ${CURPWD}/${SERVICE}
+LINK_PATH = /etc/systemd/system/${SERVICE_NAME}
 
 SHELL := /bin/bash
 
 help:
-	@echo "make prepare"; \
-    echo "       prepare virtual environment, use only once"; \
+	@echo "make install"; \
+    echo "       Start the installation"; \
     echo "make test"; \
     echo "       run tests"; \
-    echo "make lint"; \
-    echo "       run pylint"; \
-    echo "make install"; \
-    echo "       install software"; \
+    echo "make help"; \
+    echo "       show the help"; \
+    echo "make clean"; \
+    echo "       uninstall"; \
 
-install: prepare build-service
-	echo "Welcome, the installation of the detection system will settle"; \
+install: install-deps build-service
+	@echo "Welcome, the installation has been started"; \
 
 build_service:
-	eval echo $(cat ${SERVICE}.template) > ${SERVICE}.service; \
-	if test ! -L ${LINK}; then \
-		ln -s ${SERVICE}.service ${LINK}; \
+	@eval echo -e $$(cat ${SERVICE_TEMPLATE}) > ${SERVICE}; \
+	if test ! -L ${LINK_PATH}; then \
+		 sudo ln -s ${SERVICE_ABSPATH} ${LINK_PATH}; \
 	fi; \
-	systemctl enable ${LINK}; \
-	systemctl start ${LINK}; \
+	sudo systemctl enable ${LINK_PATH}; \
+	sudo systemctl start ${LINK_PATH}; \
 
-prepare:
-	sudo apt-get -y install python python3-pip gpac; \
-	pip install -r requirements.txt; \
+install-deps:
+	sudo apt-get -y install python3 python3-pip gpac; \
+	pip3 install -r requirements.txt; \
 
 test:
 	${PYTHON} -m pytest
 
-pylint:
-	${PYTHON} -m pylint *
+clean: clean-deps
+	@-sudo systemctl disable ${LINK_PATH}; \
+	sudo systemctl stop ${LINK_PATH}; \
+	sudo rm ${LINK_PATH} ${SERVICE}; \
 
-
-
-
+clean-deps:
+	@sudo apt-get remove gpac; \
+	pip3 uninstall -y  -r requirements.txt ; \
