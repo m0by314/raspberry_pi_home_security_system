@@ -24,7 +24,7 @@ install: prepare build-service
 
 build_service:
 	eval echo $(cat ${SERVICE}.template) > ${SERVICE}.service; \
-	if test ! -L ${LINK}; then; \
+	if test ! -L ${LINK}; then \
 		ln -s ${SERVICE}.service ${LINK}; \
 	fi; \
 	systemctl enable ${LINK}; \
