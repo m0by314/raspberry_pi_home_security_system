@@ -1,12 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import unittest
 
 import requests
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('..') + '/lib')
+sys.path.insert(0, os.getcwd())
 
 from lib.telebot import Telebot
 from lib.camera import Camera
@@ -14,7 +13,7 @@ from lib.pir import Motiondetector
 from lib.config import bot_id
 
 
-if not bot_id == 'Your_token_id':
+if bot_id == 'Your_token_id':
     print("Variable bot_id is not defined in lib/config.py")
     sys.exit(1)
 
@@ -66,7 +65,7 @@ class TestBotMethods(unittest.TestCase):
     def test_handler_photo(self):
         @self.bot.handler("/photo")
         def on_test_photo():
-            return 'logo-ok.png'
+            return os.getcwd() + '/testsuite/logo-ok.png'
 
         msg = {'message_id': 305,
                'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
@@ -78,11 +77,14 @@ class TestBotMethods(unittest.TestCase):
 class TestCamera(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.camera = Camera()
+        cls.folder = os.getcwd() + '/tmp/video'
+        cls.camera = Camera(10, cls.folder)
+
+    def setUp(self) -> None:
+        open(self.folder + "tests.txt", 'a').close()
 
     def test_recording(self):
         video = self.camera.start_recording()
-        print(video["return_code"])
         self.assertEqual(video["return_code"], 0, "ERROR: during recording video[\"return_code\"]")
 
     def test_take_photo(self):

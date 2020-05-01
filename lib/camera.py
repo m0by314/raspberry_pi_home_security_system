@@ -13,9 +13,9 @@ class Camera:
     :param video_time: recording time
     """
 
-    def __init__(self, video_time=20):
+    def __init__(self, video_time=20, folder='tmp/video'):
         self.camera = PiCamera()
-        self.registration_folder = 'tmp/video'
+        self.registration_folder = folder
         self.photo = os.path.join(self.registration_folder, 'photo' + time.strftime("%H%M%S-%Y%m%d") + '.jpeg')
         self.video_time = video_time
         self.record = {}

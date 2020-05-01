@@ -15,11 +15,11 @@ LINK_PATH = /etc/systemd/system/${SERVICE_NAME}
 SHELL := /bin/bash
 
 help:
-	@echo -e "\n --- Usage ---\n"; \
-	echo -e "make install    : Start the installation\n"; \
-    echo -e "make test        : Run tests\n"; \
-    echo -e "make help        : Show the help\n"; \
-    echo -e "make uninstall   : Uninstall\n"; \
+	@echo -e "Usage :"; \
+	echo -e "\tmake install     : Start the installation"; \
+    echo -e "\tmake test        : Run tests"; \
+    echo -e "\tmake help        : Show the help"; \
+    echo -e "\tmake uninstall   : Uninstall"; \
 
 text-install:
 	@echo "-------------------------------------------------"; \
@@ -49,7 +49,9 @@ install-deps:
 	pip3 install -r requirements.txt; \
 
 test:
-	${PYTHON} -m pytest
+	@sudo systemctl stop ${SERVICE_NAME}; \
+	./testsuite/tests.py; \
+	sudo systemctl start ${SERVICE_NAME}; \
 
 clean: clean-deps
 	@-echo -e "\n--- Remove service --- "; \
