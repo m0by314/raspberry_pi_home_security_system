@@ -1,4 +1,4 @@
-.PHONY: help test install clean
+.PHONY: help test install uninstall
 
 .DEFAULT: help
 
@@ -21,13 +21,13 @@ help:
     echo "       run tests"; \
     echo "make help"; \
     echo "       show the help"; \
-    echo "make clean"; \
+    echo "make uninstall"; \
     echo "       uninstall"; \
 
 start:
 	@echo "-------------------------------------------------"; \
-	echo "--- Welcome, the installation has been started ---"; \
-	@echo "-------------------------------------------------"; \
+	echo "    Welcome, the installation has been started    "; \
+	echo "-------------------------------------------------"; \
 
 install: start install-deps build-service
 
@@ -49,13 +49,17 @@ test:
 	${PYTHON} -m pytest
 
 clean: clean-deps
-	@-echo "-----------------"; \
-	echo "--- Uninstall ---"; \
-	@echo "-----------------"; \
-	sudo systemctl disable ${LINK_PATH}; \
+	@-sudo systemctl disable ${LINK_PATH}; \
 	sudo systemctl stop ${LINK_PATH}; \
 	sudo rm ${LINK_PATH} ${SERVICE}; \
 
 clean-deps:
 	@sudo apt-get -y remove gpac; \
 	pip3 uninstall -y  -r requirements.txt ; \
+
+uninstall:stop clean
+
+stop:
+	@echo "-----------------"; \
+	echo "    Uninstall    "; \
+	echo "-----------------";
