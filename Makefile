@@ -24,15 +24,18 @@ help:
     echo "make uninstall"; \
     echo "       uninstall"; \
 
-start:
+text-install:
 	@echo "-------------------------------------------------"; \
 	echo "    Welcome, the installation has been started    "; \
 	echo "-------------------------------------------------"; \
+	echo ""; \
+	echo ""; \
 
-install: start install-deps build-service
+install: text-install install-deps build-service
 
 build-service:
-	@echo "build the service"
+	@echo "Build the service"; \
+	echo ""; \
 	eval echo -e $$(cat ${SERVICE_TEMPLATE}) > ${SERVICE}; \
 	if test ! -L ${LINK_PATH}; then \
 		 sudo ln -s ${SERVICE_ABSPATH} ${LINK_PATH}; \
@@ -42,6 +45,7 @@ build-service:
 
 install-deps:
 	@echo "Installation of the dependencies"
+	echo ""; \
 	sudo apt-get -y install python3 python3-pip gpac; \
 	pip3 install -r requirements.txt; \
 
@@ -57,9 +61,11 @@ clean-deps:
 	@sudo apt-get -y remove gpac; \
 	pip3 uninstall -y  -r requirements.txt ; \
 
-uninstall:stop clean
+uninstall:text-uninstall clean
 
-stop:
+text-uninstall:
 	@echo "-----------------"; \
 	echo "    Uninstall    "; \
-	echo "-----------------";
+	echo "-----------------"; \
+	echo ""; \
+	echo "";
