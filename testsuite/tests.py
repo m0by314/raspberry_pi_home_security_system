@@ -10,11 +10,11 @@ sys.path.insert(0, os.getcwd())
 from lib.telebot import Telebot
 from lib.camera import Camera
 from lib.pir import Motiondetector
-from lib.config import bot_id
+from lib.config import bot_id, registration_folder
 
 
-if bot_id == 'Your_token_id':
-    print("Variable bot_id is not defined in lib/config.py")
+if bot_id == 'Your_token_id' or not os.path.exists(registration_folder):
+    print("Variables bot_id or registration_folder are not defined in lib/config.py")
     sys.exit(1)
 
 
@@ -65,7 +65,7 @@ class TestBotMethods(unittest.TestCase):
     def test_handler_photo(self):
         @self.bot.handler("/photo")
         def on_test_photo():
-            return os.getcwd() + '/testsuite/logo-ok.png'
+            return 'testsuite/logo-ok.png'
 
         msg = {'message_id': 305,
                'chat': {'id': self.chat_id, 'first_name': 'test', 'last_name': 'test', 'type': 'private'},
@@ -77,11 +77,10 @@ class TestBotMethods(unittest.TestCase):
 class TestCamera(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.folder = os.getcwd() + '/tmp/video'
-        cls.camera = Camera(10, cls.folder)
+        cls.camera = Camera(registration_folder, 10)
 
     def setUp(self) -> None:
-        open(self.folder + "tests.txt", 'a').close()
+        open(registration_folder + "tests.txt", 'a').close()
 
     def test_recording(self):
         video = self.camera.start_recording()
