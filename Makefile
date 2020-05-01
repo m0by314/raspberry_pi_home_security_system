@@ -44,7 +44,7 @@ build-service:
 	sudo systemctl start ${LINK_PATH}; \
 
 install-deps:
-	@echo "Installation of the dependencies"
+	@echo "Installation of the dependencies"; \
 	echo ""; \
 	sudo apt-get -y install python3 python3-pip gpac; \
 	pip3 install -r requirements.txt; \
@@ -53,12 +53,16 @@ test:
 	${PYTHON} -m pytest
 
 clean: clean-deps
-	@-sudo systemctl disable ${LINK_PATH}; \
+	@-echo "Remove service"; \
+	echo ""; \
+	sudo systemctl disable ${LINK_PATH}; \
 	sudo systemctl stop ${LINK_PATH}; \
 	sudo rm ${LINK_PATH} ${SERVICE}; \
 
 clean-deps:
-	@sudo apt-get -y remove gpac; \
+	@echo "Remove packages"; \
+	echo ""; \
+	sudo apt-get -y remove gpac; \
 	pip3 uninstall -y  -r requirements.txt ; \
 
 uninstall:text-uninstall clean
