@@ -5,8 +5,8 @@ After=network.target
 Type=simple
 RemainAfterExit=yes
 Restart=always
-ExecStart=
-WorkingDirectory=
-User=
+ExecStart=$(pwd)/motion_detector.py
+WorkingDirectory=$(pwd)
+User=$(whoami)
 [Install]
 WantedBy=multi-user.target
