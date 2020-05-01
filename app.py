@@ -1,14 +1,16 @@
 #!/usr/bin/env python
-
+"""
+Home surveillance application
+"""
 import time
 
 from lib.camera import Camera
-from lib.config import bot_id, video_time, registration_folder
+from lib.config import BOT_ID, REGISTRATION_FOLDER, VIDEO_TIME
 from lib.telebot import Telebot
 from lib.pir import Motiondetector
 
-camera = Camera(registration_folder, video_time)
-bot = Telebot(bot_id)
+camera = Camera(REGISTRATION_FOLDER, VIDEO_TIME)
+bot = Telebot(BOT_ID)
 pir = Motiondetector()
 
 
@@ -27,10 +29,7 @@ def on_stop():
 
 @bot.handler("/status")
 def on_status():
-    if bot.is_listen:
-        return str("Listening Motion run")
-    else:
-        return str("Listen Motion doesn't run")
+    return str("Listening Motion run") if bot.is_listen else str("Listen Motion doesn't run")
 
 
 @bot.handler("/photo")
@@ -40,14 +39,14 @@ def on_photo():
 
 @bot.handler("/help")
 def on_help():
-    str = "command usage:\n"
-    str += "\t/start launch the dectection\n"
-    str += "\t/stop stop the detection\n"
-    str += "\t/photo take a photo\n"
-    str += "\t/status show status of the movement detection\n"
-    str += "\t/help show help\n"
-    str += "\t/clean remove all files in video folder\n"
-    return str
+    msg = "command usage:\n"
+    msg += "\t/start launch the dectection\n"
+    msg += "\t/stop stop the detection\n"
+    msg += "\t/photo take a photo\n"
+    msg += "\t/status show status of the movement detection\n"
+    msg += "\t/help show help\n"
+    msg += "\t/clean remove all files in video folder\n"
+    return msg
 
 
 @bot.handler("/clean")
@@ -64,4 +63,3 @@ try:
             time.sleep(1)
 except KeyboardInterrupt:
     del camera
-

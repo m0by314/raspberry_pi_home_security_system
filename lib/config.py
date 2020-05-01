@@ -1,5 +1,7 @@
-# Variable configuration file
+"""
+configuration file
+"""
 
-bot_id = 'Your_token_id'
-registration_folder = 'tmp/video'
-video_time = 20
+BOT_ID = 'Your_token_id'
+REGISTRATION_FOLDER = 'tmp/video'
+VIDEO_TIME = 20

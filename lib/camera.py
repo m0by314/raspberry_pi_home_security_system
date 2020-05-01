@@ -1,3 +1,6 @@
+"""
+Camera library
+"""
 import subprocess
 import time
 import os
@@ -16,8 +19,13 @@ class Camera:
     def __init__(self, folder, video_time=20):
         self.camera = PiCamera()
         self.registration_folder = folder
-        self.photo = os.path.join(self.registration_folder, 'photo' + time.strftime("%H%M%S-%Y%m%d") + '.jpeg')
+        self.photo = os.path.join(self.registration_folder, 'photo' +
+                                  time.strftime("%H%M%S-%Y%m%d") + '.jpeg')
         self.video_time = video_time
+        self.video_h264 = os.path.join(self.registration_folder,
+                                       'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.h264')
+        self.video_mp4 = os.path.join(self.registration_folder,
+                                      'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.mp4')
         self.record = {}
 
     def start_recording(self):
@@ -25,9 +33,6 @@ class Camera:
         Starts the recording of the video
         :return: dictionary containing the name of the video and the return code of the recording.
         """
-        self.video = os.path.join(self.registration_folder, 'vid-' + time.strftime("%H%M%S-%Y%m%d"))
-        self.video_h264 = self.video + '.h264'
-
         self.camera.start_recording(self.video_h264)
         time.sleep(self.video_time)
         self.camera.stop_recording()
@@ -45,8 +50,6 @@ class Camera:
         Converted the video format h264 in mp4
         return error message if conversion is in fail
         """
-        self.video_mp4 = self.video + '.mp4'
-
         command = "MP4Box -add {} {}".format(self.video_h264, self.video_mp4)
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
@@ -57,6 +60,10 @@ class Camera:
             return 0
 
     def take_photo(self):
+        """
+        Take a photo
+        :return: photo format .jpeg
+        """
         self.camera.capture(self.photo)
         return self.photo
 

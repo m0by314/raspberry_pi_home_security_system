@@ -1,7 +1,10 @@
+"""
+Pir library
+"""
 from gpiozero import MotionSensor
 
 
-class Motiondetector:
+class Motiondetector:  # pylint: disable=too-few-public-methods
     """
     Class to interfaces with Raspberry PIR motion sensor module
     """
@@ -10,7 +13,8 @@ class Motiondetector:
         self.pir = MotionSensor(4)
 
     def movement_detected(self):
-        if self.pir.motion_detected:
-            return True
-        else:
-            return False
+        """
+        check if movement detected
+        :return:
+        """
+        return bool(self.pir.motion_detected)

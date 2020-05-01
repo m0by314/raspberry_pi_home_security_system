@@ -1,5 +1,8 @@
-import telepot
+"""
+telebot library
+"""
 import collections
+import telepot
 
 
 class Telebot(telepot.Bot):
@@ -31,6 +34,9 @@ class Telebot(telepot.Bot):
 
     @property
     def is_listen(self):
+        """
+        Return bot status
+        """
         return self._islisten
 
     @is_listen.setter
