@@ -1,1 +1,1 @@
-[Unit]\\nDescription=Mouvement detection\\nAfter=network.target\\n[Service]\\nType=simple\\nRemainAfterExit=yes\\nRestart=always\\nExecStart=$(pwd)/motion_detector.py\\nWorkingDirectory=$(pwd)\\nUser=$(whoami)\\n[Install]\\nWantedBy=multi-user.target\\n
+[Unit]\\nDescription=Home surveillance system\\nAfter=network.target\\n[Service]\\nType=simple\\nRemainAfterExit=yes\\nRestart=always\\nExecStart=python3 $(pwd)/app.py\\nWorkingDirectory=$(pwd)\\nUser=$(whoami)\\n[Install]\\nWantedBy=multi-user.target\\n
