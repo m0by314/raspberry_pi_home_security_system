@@ -45,6 +45,7 @@ $(VENV_NAME)/bin/activate:
 	test -d $(VENV_NAME) || virtualenv -p python3 $(VENV_NAME)
 	${PYTHON} -m pip install -U pip
 	${PYTHON} -m pip install -e .
+	. venv/bin/activate
 	touch $(VENV_NAME)/bin/activate
 
 install-deps: venv

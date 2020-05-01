@@ -13,7 +13,7 @@ from lib.camera import Camera
 from lib.pir import Motiondetector
 from lib.config import bot_id, registration_folder
 
-registration_folder = os.path.abspath('..') + '/' + registration_folder
+
 if not os.path.exists(registration_folder) or bot_id == 'Your_token_id':
     print("Variables (registration_folder or bot_id) are not defined in lib/config.py")
     sys.exit(1)
