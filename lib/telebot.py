@@ -80,8 +80,8 @@ class Telebot(telepot.Bot):
         Send the video if there are no errors in the recording, otherwise send the error message.
 
         :param video: a dictionary containing the name of the video,
-                                the return code of the recording
-                                and the error message if recording fail
+                      the return code of the recording
+                      and the error message if recording fail
         """
         if video["return_code"] == 0:
             self.sendVideo(self.chat_id, video=open(video["name"], 'rb'), caption='Motion Detected')
