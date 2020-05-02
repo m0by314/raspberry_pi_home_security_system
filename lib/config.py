@@ -2,6 +2,6 @@
 configuration file
 """
 
-BOT_ID = 'Your_token_id'
-REGISTRATION_FOLDER = 'tmp/video'
-VIDEO_TIME = 20
+TOKEN_ID = 'Your token_id'
+VIDEO_TIME = 60  # duration of video recording
+REGISTRATION_FOLDER = 'tmp/video'  # video recording folder

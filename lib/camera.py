@@ -1,5 +1,5 @@
 """
-Camera library
+Module Camera
 """
 import subprocess
 import time

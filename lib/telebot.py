@@ -1,5 +1,5 @@
 """
-telebot library
+Module Telebot
 """
 import collections
 import telepot
@@ -7,7 +7,7 @@ import telepot
 
 class Telebot(telepot.Bot):
     """
-    The Telepot object use a telepot bot.
+    The Telebot class use a telepot bot.
     The management of the bot is done through the handle decorator
         Example:
             @bot.handle("/start")

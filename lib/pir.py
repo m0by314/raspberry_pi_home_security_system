@@ -1,10 +1,10 @@
 """
-Pir library
+Module MotionDetector
 """
 from gpiozero import MotionSensor
 
 
-class Motiondetector:  # pylint: disable=too-few-public-methods
+class MotionDetector:  # pylint: disable=too-few-public-methods
     """
     Class to interfaces with Raspberry PIR motion sensor module
     """
