@@ -21,7 +21,7 @@ def on_start():
     :return: string
     """
     bot.is_listen = True
-    return str("Start Bot")
+    bot.send_message("Start Bot")
 
 
 @bot.handler("/stop")
@@ -31,7 +31,7 @@ def on_stop():
     :return: string
     """
     bot.is_listen = False
-    return str("Stop Bot")
+    bot.send_message("Stop Bot")
 
 
 @bot.handler("/status")

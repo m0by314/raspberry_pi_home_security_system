@@ -68,12 +68,17 @@ class Telebot(telepot.Bot):
         self.command = msg['text']
 
         for handle in self._handle.get(self.command, []):
-            if "photo" in self.command:
-                self.sendPhoto(self.chat_id, photo=open(handle(), 'rb'), caption='photo')
-            else:
-                self.sendMessage(self.chat_id, handle())
+            handle()
             return 0
         return 1
+
+    def send_message(self, msg):
+        """
+
+        :param msg:
+        :return:
+        """
+        super().sendMessage(self.chat_id, msg)
 
     def send_video(self, video):
         """

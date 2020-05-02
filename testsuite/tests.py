@@ -12,7 +12,7 @@ sys.path.insert(0, os.getcwd())
 from lib.telebot import Telebot
 from lib.config import TOKEN_ID, REGISTRATION_FOLDER
 
-if BOT_ID == 'Your_token_id' or not os.path.exists(REGISTRATION_FOLDER):
+if TOKEN_ID == 'Your_token_id' or not os.path.exists(REGISTRATION_FOLDER):
     print("Variables bot_id or registration_folder are not defined in lib/config.py")
     sys.exit(1)
 
