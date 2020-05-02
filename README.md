@@ -34,7 +34,6 @@ The system is started by a systemd service activated at boot time
 make install
 ```
 
-
 ### Bot's commands
 
 * /start  start the home monitoring system 
@@ -43,19 +42,19 @@ make install
 * /photo  take a picture   
 * /clean  remove all files in video folder
 * /help   show help 
-
-### Details 
-
-* By default, the duration of the video is set to 60s. If you want change this, you need to modify the VIDEO_TIME constant in `lib/config.py`    
-
-* It's possible to add other commands to the bot in `app.py` with the decorator @bot.handler()
-```
-@bot.handler("/<cmd>")
-def func_cmd():
-    # stuff
-    # return result to sent
-```
   
+### Details 		
+
+  * By default, the duration of the video is set to 60s. If you want change this, you need to modify the VIDEO_TIME constant in `lib/config.py`    		
+
+  * It's possible to add other commands to the bot in `app.py` with the decorator @bot.handler()		
+ ```		
+ @bot.handler("/<cmd>")		
+ def func_cmd():		
+     # stuff		
+     # return result to sent		
+ ```
+ 
 ### Testing
  
 ```
