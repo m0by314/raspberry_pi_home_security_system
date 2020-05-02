@@ -1,67 +1,75 @@
-# Motion Detector With RaspberryPi and Telegram Bot 
+# Home surveillance With RaspberryPi and Telegram bot 
 
-How to use a Raspberry Pi to find out who’s been in your home! Make a motion detector that uses a motion sensor to trigger video recording via the Raspberry Pi Camera Module. The video is send on your smartphone by Telegram Bot 
+How to build a home surveillance system with a RaspberryPI, a motion sensor, a camera and a Telegram bot. 
 
+### How it works
+
+When a movement is detected, the application records a video that is sent to your phone by the bot.  
+Once installed, the monitoring system is managed from your smartphone with the bot's commands.  
+The system is started by a systemd service activated at boot time
 
 ### Prerequisites
 
 * Raspberry Pi Camera Module  
 * PIR motion sensor module   
 * 3 female-to-female jumper wires   
-* [Create a Telegram Bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot)  
+* [Tutorial for create your Telegram Bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot)  
 
 ### Connect the PIR sensor
 
 ![image](img/pir-diagram.png)
 
-## Quick start
-
- * Add the Python dependencies see Installing section   
- * Add your token_id in `lib/config.pl`   
+## Setup
+   
+ * open the file `lib/config.pl` and add your token_id   
  ```
-     bot_id      = 'Your_token_id'
+     TOKEN_ID = 'Your token_id'
+     VIDEO_TIME = 60  # duration of video recording
+     REGISTRATION_FOLDER = 'tmp/video'  # video recording folder
 ```
- * Launch script `motion-detector.py`  
+
+### Installing 
  
+```
+make install
+```
 
-### Installing
 
-Installing python3 dependencies  :   
-```
-pip3 install -r requirement.txt
-```
-Launch `setup.py` which sudo command for create systemd service and start service 
-```
-sudo ./setup.py
-```
+### Bot's commands
+
+* /start  start the home monitoring system 
+* /stop   stop the home monitoring system  
+* /status show the status of the monitoring system 
+* /photo  take a picture   
+* /clean  remove all files in video folder
+* /help   show help 
 
 ### Details 
 
-* By default, the duration of the video is set to 20s. If you want change this, you need to modify the video_time variable in `lib/config.py`    
-```
-video_time = 20
-```
-* `setup.py` action :   
-   * Build systemd service motion-detector.service with current directory   
-   * Create link in  `/etc/systemd/system`    
-   * Activate service at boot    
-   * Start service 
-   
-### Bot commands
+* By default, the duration of the video is set to 60s. If you want change this, you need to modify the VIDEO_TIME constant in `lib/config.py`    
 
-* /start launch the dectection  
-* /stop stop the detection  
-* /snap take a photo  
-* /status show status of the movement detection  
-* /help show help  
-* /clean remove all files in video folder  
+* It's possible to add other commands to the bot in `app.py` with the decorator @bot.handler()
+```
+@bot.handler("/<cmd>")
+def func_cmd():
+    # stuff
+    # return result to sent
+```
   
+### Testing
+ 
+```
+make test
+```
+
+### Uninstall
+ 
+```
+make uninstall
+```
+
 ## Built With
 
 * [gpiozero](https://pypi.org/project/gpiozero/)
 * [telepot](https://pypi.org/project/telepot/)  
 * [picamera](https://pypi.org/project/picamera/) 
-
-
-
-
