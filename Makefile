@@ -50,7 +50,7 @@ install-deps:
 
 test:
 	@sudo systemctl stop ${SERVICE_NAME}; \
-	./testsuite/tests.py; \
+	python3 -m unittest testsuite/*_test.py; \
 	sudo systemctl start ${SERVICE_NAME}; \
 
 clean: clean-deps
