@@ -20,7 +20,7 @@ class TestCamera(unittest.TestCase):
         """
         Initialize camera
         """
-        cls.camera = Camera(REGISTRATION_FOLDER, 10)
+        cls.camera = Camera(REGISTRATION_FOLDER)
 
     def setUp(self) -> None:
         """
@@ -32,7 +32,7 @@ class TestCamera(unittest.TestCase):
         """
         Test method camera.start_recording()
         """
-        video = self.camera.start_recording()
+        video = self.camera.start_recording(10)
         self.assertEqual(video["return_code"], 0, "ERROR: during recording video[\"return_code\"]")
 
     def test_take_photo(self):

@@ -33,14 +33,13 @@ build-service:
 	@echo -e "\n--- Build the service ---\n"; \
 	eval echo -e $$(cat ${SERVICE_TEMPLATE}) > ${SERVICE}; \
 	if test ! -L ${LINK_PATH}; then \
-	  	 echo -e "--- Create link ---"; \
 		 sudo ln -s ${SERVICE_ABSPATH} ${LINK_PATH}; \
-		 echo -e "--- Done ---\n"; \
 	fi; \
 	echo -e "--- Activate service ---"; \
 	sudo systemctl start ${SERVICE_NAME}; \
 	sudo systemctl enable ${LINK_PATH}; \
-	echo -e "--- Done ---\n"; \
+	echo -e "--- Done ---"; \
+	echo -e "--- Build service done ---\n"; \
 
 install-deps:
 	@echo -e "\n--- Packages installation ---\n"; \

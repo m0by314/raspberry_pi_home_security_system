@@ -19,7 +19,7 @@ class TestPir(unittest.TestCase):
         """
         Initialize Motiondetector class
         """
-        cls.pir = Motiondetector()
+        cls.pir = MotionDetector()
 
     def test_movement_detected(self):
         """

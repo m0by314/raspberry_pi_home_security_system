@@ -37,7 +37,7 @@ def on_status():
     """
     command /status: show bot status
     """
-    bot.send_message("Listening Motion run") if bot.is_listen else bot.sendMessage("Listen Motion doesn't run")
+    bot.send_message("Listening Motion run") if bot.is_listen else bot.send_message("Listen Motion doesn't run")
 
 
 @bot.handler("/photo")
@@ -55,6 +55,7 @@ def on_video(*args):
 
     :param args: arguments of the bot's command
     """
+    bot.send_message("Recording start")
     bot.send_video(camera.start_recording(args[0]), "video")
 
 
