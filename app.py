@@ -21,7 +21,7 @@ def on_start():
     :return: string
     """
     bot.is_listen = True
-    bot.send_message("Start Bot")
+    bot.sendMessage("Start Bot")
 
 
 @bot.handler("/stop")
@@ -31,7 +31,7 @@ def on_stop():
     :return: string
     """
     bot.is_listen = False
-    bot.send_message("Stop Bot")
+    bot.sendMessage("Stop Bot")
 
 
 @bot.handler("/status")
@@ -40,7 +40,7 @@ def on_status():
     command /status: show bot status
     :return: string
     """
-    return str("Listening Motion run") if bot.is_listen else str("Listen Motion doesn't run")
+    bot.sendMessage("Listening Motion run") if bot.is_listen else bot.sendMessage("Listen Motion doesn't run")
 
 
 @bot.handler("/photo")
@@ -49,7 +49,16 @@ def on_photo():
     command /photo: take a photo
     :return: file format .jpeg
     """
-    return camera.take_photo()
+    bot.sendPhoto(camera.take_photo(), "photo")
+
+
+@bot.handler("/video")
+def on_photo():
+    """
+    command /video: take a video
+    :return: file format .mp4
+    """
+    bot.sendVideo(camera.start_recording(), "video")
 
 
 @bot.handler("/help")
@@ -65,7 +74,7 @@ def on_help():
     msg += "\t/photo take a picture\n"
     msg += "\t/clean remove all files in video folder\n"
     msg += "\t/help show help\n"
-    return msg
+    bot.sendMessage(msg)
 
 
 @bot.handler("/clean")
@@ -74,7 +83,7 @@ def on_clean():
     command /clean: remove file in REGISTRATION_FOLDER
     :return: function
     """
-    return camera.purge_records()
+    bot.sendMessage(camera.purge_records())
 
 
 print('I am listening ...')

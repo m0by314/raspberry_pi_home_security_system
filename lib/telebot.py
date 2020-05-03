@@ -43,17 +43,18 @@ class Telebot(telepot.Bot):
     def is_listen(self, status):
         self._islisten = status
 
-    def handler(self, rule):
+    def handler(self, cmd):
         """
         Decorator to create the bot commands
         Add commands as a function in a dictionary
 
-        :param rule: The rule this handle will created
+        :param cmd: the command name
         :return decorator:
         """
 
         def decorator(func):
-            self._handle[rule].append(func)
+            print(cmd)
+            self._handle[cmd].append(func)
             return func
 
         return decorator
@@ -72,7 +73,16 @@ class Telebot(telepot.Bot):
             return 0
         return 1
 
-    def send_message(self, msg):
+    def sendPhoto(self, file, msg):
+        """
+        Method for send photo
+        :param file: photo to send
+        :param msg:
+        :return:
+        """
+        super().sendPhoto(self.chat_id, photo=open(file, 'rb'), caption=msg)
+
+    def sendMessage(self, msg):
         """
 
         :param msg:
@@ -80,15 +90,16 @@ class Telebot(telepot.Bot):
         """
         super().sendMessage(self.chat_id, msg)
 
-    def send_video(self, video):
+    def sendVideo(self, video, msg):
         """
         Send the video if there are no errors in the recording, otherwise send the error message.
 
         :param video: a dictionary containing the name of the video,
                       the return code of the recording
                       and the error message if recording fail
+        :param msg:
         """
         if video["return_code"] == 0:
-            self.sendVideo(self.chat_id, video=open(video["name"], 'rb'), caption='Motion Detected')
+            super().sendVideo(self.chat_id, video=open(video["name"], 'rb'), caption=msg)
         else:
-            self.sendMessage(self.chat_id, video["return_code"])
+            super().sendMessage(self.chat_id, video["return_code"])
