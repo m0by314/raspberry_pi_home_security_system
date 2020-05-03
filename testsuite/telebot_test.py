@@ -29,7 +29,7 @@ class TestBotMethods(unittest.TestCase):
         Query Telegram API
         Get chat_id and write in data.raw
         """
-        data = 'testsuite/data.raw'
+        data = os.getcwd() + 'data.raw'
         if os.path.isfile(data):
             with open(data) as file:
                 cls.chat_id = file.read()

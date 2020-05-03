@@ -11,6 +11,9 @@ SERVICE_TEMPLATE = etc/${SERVICE_NAME}.template
 
 SERVICE_ABSPATH = ${CURPWD}/${SERVICE}
 LINK_PATH = /etc/systemd/system/${SERVICE_NAME}
+DATA = testsuite/data.raw
+
+TOKEN_ID=$$(grep TOKEN_ID lib/config.py | awk ' {print $$3}')
 
 SHELL := /bin/bash
 
@@ -27,7 +30,7 @@ text-install:
 	echo "-------------------------------------------------"; \
 
 
-install: text-install install-deps build-service
+install: text-install check_token_id install-deps build-service test
 
 build-service:
 	@echo -e "\n--- Build the service ---\n"; \
@@ -47,6 +50,13 @@ install-deps:
 	echo -e "\n --- Requirements installation ---\n"; \
 	pip3 install -r requirements.txt; \
 
+check_token_id:
+	@if test ${TOKEN_ID}x = "Your token_id"x; then \
+	  	echo "Your token_id isn't define in lib/config"; \
+	  	echo "Please set your token_id before launch install"; \
+	  	exit; \
+	fi; \
+
 test:
 	@sudo systemctl stop ${SERVICE_NAME}; \
 	python3 -m unittest testsuite/*_test.py; \
@@ -56,7 +66,7 @@ clean: clean-deps
 	@-echo -e "\n--- Remove service --- "; \
 	sudo systemctl stop ${SERVICE_NAME}; \
 	sudo systemctl disable ${LINK_PATH}; \
-	sudo rm ${LINK_PATH} ${SERVICE}; \
+	sudo rm ${LINK_PATH} ${SERVICE} ${DATA}; \
 	echo -e "--- done --\n "; \
 
 clean-deps:
