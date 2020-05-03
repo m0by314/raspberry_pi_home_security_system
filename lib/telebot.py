@@ -2,6 +2,7 @@
 Module Telebot
 """
 import collections
+import functools
 import telepot
 
 
@@ -53,10 +54,11 @@ class Telebot(telepot.Bot):
         """
 
         def decorator(func):
-            print(cmd)
-            self._handle[cmd].append(func)
-            return func
-
+            @functools.wraps(func)
+            def callfunc(*args, **kwargs):
+                print(*args, **kwargs)
+                self._handle[cmd].append(func(*args, **kwargs))
+            return callfunc
         return decorator
 
     def _postreceive(self, msg):
@@ -67,6 +69,7 @@ class Telebot(telepot.Bot):
         """
         self.chat_id = msg['chat']['id']
         self.command = msg['text']
+        print(self.command)
 
         for handle in self._handle.get(self.command, []):
             handle()
