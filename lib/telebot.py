@@ -63,8 +63,8 @@ class Telebot(telepot.Bot):
 
         :return: tuples arguments
         """
-        regex_args = re.compile('=(\w+|\d+)')
-        regex_cmd = re.compile('^\/\w+')
+        regex_args = re.compile(r'=(\w+|\d+)')
+        regex_cmd = re.compile(r'^\/\w+')
 
         args = re.findall(regex_args, self.command)
         self.command = regex_cmd.search(self.command).group(0)
@@ -82,11 +82,7 @@ class Telebot(telepot.Bot):
         args = self._get_args()
 
         for handle in self._handle.get(self.command, []):
-            if args is not None:
-                return handle(*args)
-            else:
-                return handle()
-
+            return handle(*args) if args else handle()
 
     def send_photo(self, file, msg):
         """

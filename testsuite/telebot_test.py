@@ -29,18 +29,21 @@ class TestBotMethods(unittest.TestCase):
         Query Telegram API
         Get chat_id and write in data.raw
         """
-        cls.bot = Telebot(TOKEN_ID)
-        cls.response = requests.get("https://api.telegram.org/bot{TOKEN}/getMe".format(TOKEN=TOKEN_ID))
-
         data = 'testsuite/data.raw'
         if os.path.isfile(data):
             with open(data) as file:
                 cls.chat_id = file.read()
         else:
-            cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=TOKEN_ID)).json()['result'][0]['message']['chat']['id']
+            cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates"
+                                       .format(TOKEN=TOKEN_ID)) \
+                                       .json()['result'][0]['message']['chat']['id']
             with open(data, 'w') as file:
                 file.write(str(cls.chat_id))
         file.close()
+
+        cls.bot = Telebot(TOKEN_ID)
+        cls.response = requests.get("https://api.telegram.org/bot{TOKEN}/getMe"
+                                    .format(TOKEN=TOKEN_ID))
 
     def test_query_url(self):
         """
@@ -102,7 +105,7 @@ class TestBotMethods(unittest.TestCase):
         Test send message
         """
 
-        @self.bot.handler("/testsuite")
+        @self.bot.handler("/message")
         def on_test():
             return self.bot.send_message("Test send message")
 
@@ -112,10 +115,10 @@ class TestBotMethods(unittest.TestCase):
                         'last_name': 'test',
                         'type': 'private'},
                'date': 1586725459,
-               'text': '/testsuite',
+               'text': '/message',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
 
-        self.assertEqual(self.bot._postreceive(msg), "Test send message", "Send message doesn't function")
+        self.assertEqual(self.bot._postreceive(msg), None, "Send message doesn't function")
 
     def test_handler_photo(self):
         """
