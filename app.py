@@ -88,7 +88,7 @@ print('I am listening ...')
 try:
     while True:
         if bot.is_listen and pir.movement_detected():
-            bot.send_video(camera.start_recording(VIDEO_TIME, 'motion detected'))
+            bot.send_video(camera.start_recording(VIDEO_TIME), 'motion detected')
         else:
             time.sleep(1)
 except KeyboardInterrupt:

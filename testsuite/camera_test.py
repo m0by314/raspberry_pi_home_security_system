@@ -33,7 +33,7 @@ class TestCamera(unittest.TestCase):
         Test method camera.start_recording()
         """
         video = self.camera.start_recording(10)
-        self.assertEqual(video["return_code"], 0, "ERROR: during recording video[\"return_code\"]")
+        self.assertEqual(video["return_code"], None, "ERROR: during recording video[\"return_code\"]")
 
     def test_take_photo(self):
         """

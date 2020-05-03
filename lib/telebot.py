@@ -83,11 +83,10 @@ class Telebot(telepot.Bot):
 
         for handle in self._handle.get(self.command, []):
             if args is not None:
-                handle(*args)
+                return handle(*args)
             else:
-                handle()
-            return 0
-        return 1
+                return handle()
+
 
     def send_photo(self, file, msg):
         """

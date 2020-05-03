@@ -38,7 +38,7 @@ build-service:
 	echo -e "--- Activate service ---"; \
 	sudo systemctl start ${SERVICE_NAME}; \
 	sudo systemctl enable ${LINK_PATH}; \
-	echo -e "--- Done ---"; \
+	echo -e "--- Done ---\n"; \
 	echo -e "--- Build service done ---\n"; \
 
 install-deps:

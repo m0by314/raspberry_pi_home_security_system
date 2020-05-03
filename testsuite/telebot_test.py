@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
 Testing bot module
 """
@@ -30,16 +30,14 @@ class TestBotMethods(unittest.TestCase):
         Get chat_id and write in data.raw
         """
         cls.bot = Telebot(TOKEN_ID)
-        cls.response = requests.get("https://api.telegram.org/bot{TOKEN}/getMe"
-                                    .format(TOKEN=TOKEN_ID))
-        data = os.getcwd() + 'data.raw'
+        cls.response = requests.get("https://api.telegram.org/bot{TOKEN}/getMe".format(TOKEN=TOKEN_ID))
+
+        data = 'testsuite/data.raw'
         if os.path.isfile(data):
             with open(data) as file:
                 cls.chat_id = file.read()
         else:
-            cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates"
-                                       .format(TOKEN=TOKEN_ID)) \
-                .json()['result'][0]['message']['chat']['id']
+            cls.chat_id = requests.get("https://api.telegram.org/bot{TOKEN}/getUpdates".format(TOKEN=TOKEN_ID)).json()['result'][0]['message']['chat']['id']
             with open(data, 'w') as file:
                 file.write(str(cls.chat_id))
         file.close()
@@ -79,7 +77,7 @@ class TestBotMethods(unittest.TestCase):
         self.bot.is_listen = False
         self.assertEqual(self.bot.is_listen, 0, "Cannot set Bot.is_listen to OFF")
 
-    def test_handle(self):
+    def test_handler(self):
         """
         Test handler
         """
@@ -96,16 +94,37 @@ class TestBotMethods(unittest.TestCase):
                'date': 1586725459,
                'text': '/testsuite',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
-        self.assertEqual(self.bot._postreceive(msg), 0, "Handler doesn't function")
+
+        self.assertEqual(self.bot._postreceive(msg), "Test handler", "Handler doesn't function")
+
+    def test_send_message(self):
+        """
+        Test send message
+        """
+
+        @self.bot.handler("/testsuite")
+        def on_test():
+            return self.bot.send_message("Test send message")
+
+        msg = {'message_id': 305,
+               'chat': {'id': self.chat_id,
+                        'first_name': 'test',
+                        'last_name': 'test',
+                        'type': 'private'},
+               'date': 1586725459,
+               'text': '/testsuite',
+               'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
+
+        self.assertEqual(self.bot._postreceive(msg), "Test send message", "Send message doesn't function")
 
     def test_handler_photo(self):
         """
-        Test handler photo
+        Test send photo
         """
 
         @self.bot.handler("/photo")
         def on_test_photo():
-            return 'testsuite/logo-ok.png'
+            return self.bot.send_photo('testsuite/logo-ok.png', "Testsuite")
 
         msg = {'message_id': 305,
                'chat': {'id': self.chat_id,
@@ -114,7 +133,8 @@ class TestBotMethods(unittest.TestCase):
                         'type': 'private'},
                'date': 1586725459, 'text': '/photo',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
-        self.assertEqual(self.bot._postreceive(msg), 0, "Handler photo doesn't function")
+
+        self.assertEqual(self.bot._postreceive(msg), None, "Send photo doesn't function")
 
 
 if __name__ == '__main__':
