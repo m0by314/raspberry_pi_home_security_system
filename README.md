@@ -19,9 +19,16 @@ The system is started by a systemd service activated at boot time
 
 ![image](img/pir-diagram.png)
 
+## Setting up the camera hardware
+```
+sudo raspig-config
+```
+Use the cursor keys to select and open Interfacing Options, and then select Camera and follow the prompt to enable the camera.  
+Upon exiting `raspi-config`, it will ask to reboot.
+
 ## Setup
    
- * open the file `lib/config.pl` and add your token_id   
+ * Open the file `lib/config.pl` and add your token_id   
  ```
      TOKEN_ID = 'Your token_id'
      VIDEO_TIME = 60  # duration of video recording
@@ -29,19 +36,21 @@ The system is started by a systemd service activated at boot time
 ```
 
 ### Installing 
- 
+
+Before installing set your token_id then:
 ```
 make install
 ```
 
 ### Bot's commands
 
-* /start  start the home monitoring system 
-* /stop   stop the home monitoring system  
-* /status show the status of the monitoring system 
-* /photo  take a picture   
-* /clean  remove all files in video folder
-* /help   show help 
+* /start  : start the home monitoring system 
+* /stop   : stop the home monitoring system  
+* /status : show the status of the monitoring system 
+* /photo  : take a picture 
+* /video time=<delay> : records a video, argument time defines the duration of the recording
+* /clean  : remove all files in video folder
+* /help   : show help 
   
 ### Details 		
 
@@ -49,10 +58,9 @@ make install
 
   * It's possible to add other commands to the bot in `app.py` with the decorator @bot.handler()		
  ```		
- @bot.handler("/<cmd>")		
- def func_cmd():		
-     # stuff		
-     # return result to sent		
+ @bot.handler("/hello")		
+ def func_hello():		
+     return bot.semd_message("Hello World")		
  ```
  
 ### Testing
