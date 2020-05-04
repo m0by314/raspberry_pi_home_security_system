@@ -1,12 +1,12 @@
 """
-Module MotionDetector
+Package for interfacing with Raspberry PI PIR motion sensor.
 """
 from gpiozero import MotionSensor
 
 
 class MotionDetector:  # pylint: disable=too-few-public-methods
     """
-    Class to interfaces with Raspberry PIR motion sensor module
+    Class to interfaces with Raspberry PI PIR motion sensor module
     """
 
     def __init__(self):
@@ -14,7 +14,7 @@ class MotionDetector:  # pylint: disable=too-few-public-methods
 
     def movement_detected(self):
         """
-        check if movement detected
-        :return:
+        Check if movement detected.
+        :return: boolean
         """
         return bool(self.pir.motion_detected)

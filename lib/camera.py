@@ -1,5 +1,5 @@
 """
-Module Camera
+Package for interfacing with Raspberry PI camera.
 """
 import subprocess
 import time
@@ -10,15 +10,16 @@ from picamera import PiCamera
 
 class Camera:
     """
-    Class to interfaces with Raspberry Pi Camera module
+    Class to interfaces with Raspberry Pi Camera module.
+    Photos and videos are named photo-%H%M%S-%Y%m%d.jpeg and vid-%H%M%S-%Y%m%d.mp4 respectively.
 
-    :param registration_folder: folder path for video recording
+    :param folder: allows you to define the folder where the records are stored.
     """
 
     def __init__(self, folder):
         self.camera = PiCamera()
         self.registration_folder = folder
-        self.photo = os.path.join(self.registration_folder, 'photo' +
+        self.photo = os.path.join(self.registration_folder, 'photo-' +
                                   time.strftime("%H%M%S-%Y%m%d") + '.jpeg')
         self.video_h264 = os.path.join(self.registration_folder,
                                        'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.h264')
@@ -28,7 +29,7 @@ class Camera:
 
     def start_recording(self, delay=60):
         """
-        Starts recording the video for a time defined by a delay parameter
+        Starts recording the video for a time defined by a delay parameter.
 
         :param delay: recording time
         :return: dictionary containing the name of the video and the return code of the recording.
@@ -46,7 +47,7 @@ class Camera:
 
     def __convert_h264_to_mp4(self):
         """
-        Converted the video format h264 in mp4
+        Converted the video format h264 in mp4.
 
         :return: error message if conversion is in fail or None
         """
@@ -61,9 +62,9 @@ class Camera:
 
     def take_photo(self):
         """
-        Take a photo
+        Take a photo.
 
-        :return: photo, format .jpeg
+        :return: photo at format .jpeg
         """
         self.camera.capture(self.photo)
         return self.photo
@@ -73,7 +74,7 @@ class Camera:
 
     def purge_records(self):
         """
-        Deletes records from the folder
+        Deletes records from the folder.
 
         :return: deletion result
         """

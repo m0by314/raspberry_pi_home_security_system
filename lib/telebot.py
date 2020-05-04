@@ -1,5 +1,5 @@
 """
-Module Telebot
+Package to create a telegram bot with the telepot module
 """
 import collections
 import re
@@ -9,16 +9,23 @@ import telepot
 class Telebot(telepot.Bot):
     """
     The Telebot class use a telepot bot.
-    The management of the bot is done through the handle decorator
+
+    The management of the bot's command is done through the handle decorator
         Example:
             @bot.handler("/start")
             def on_start():
                 bot.is_listen = True
-                bot.sendMessage("Bot start")
+                return bot.sendMessage("Bot start")
 
             @bot.handler("/photo")
             def on_photo():
-                bot.sendPhoto(camera.take_photo(), "photo")
+                return bot.sendPhoto(camera.take_photo(), "photo")
+
+    Commands can contain arguments arg=value (takes into account only words or numbers)
+        Example for the command /hello arg=world:
+            @bot.handler("/hello")
+                def on_video(*args):
+                return bot.send_message("Hello " + args[0])
 
     :param token_id : the token id
     """
@@ -26,7 +33,7 @@ class Telebot(telepot.Bot):
     def __init__(self, token_id):
         super().__init__(token_id)
         self._handle = collections.defaultdict(list)
-        self.message_loop(self._postreceive)
+        self.message_loop(self.postreceive)
         self.chat_id = None
         self.command = None
         self._is_listen = False
@@ -34,11 +41,11 @@ class Telebot(telepot.Bot):
     @property
     def is_listen(self):
         """
-        Property bot status
+        Bot status
 
-        :return: True or False
+        :return: boolean
         """
-        return self._is_listen
+        return bool(self._is_listen)
 
     @is_listen.setter
     def is_listen(self, status):
@@ -70,9 +77,9 @@ class Telebot(telepot.Bot):
         self.command = regex_cmd.search(self.command).group(0)
         return tuple(args)
 
-    def _postreceive(self, msg):
+    def postreceive(self, msg):
         """
-        callback for telepot.message_loop
+        Callback for :attr message_loop()
 
         :param msg: message received
         """

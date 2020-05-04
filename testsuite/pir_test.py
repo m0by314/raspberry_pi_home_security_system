@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
-Testing Pir Module
+Testing for Pir package
 """
 import unittest
 import sys

@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """
-Testing camera module
+Testing for camera package
 """
 import unittest
 import sys

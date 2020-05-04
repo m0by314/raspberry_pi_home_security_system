@@ -58,7 +58,8 @@ check_token_id:
 	fi; \
 
 test:
-	@sudo systemctl stop ${SERVICE_NAME}; \
+	@echo -e "--- Testing ---\n"; \
+	sudo systemctl stop ${SERVICE_NAME}; \
 	python3 -m unittest testsuite/*_test.py; \
 	sudo systemctl start ${SERVICE_NAME}; \
 
