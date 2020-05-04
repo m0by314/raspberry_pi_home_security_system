@@ -98,7 +98,7 @@ class TestBotMethods(unittest.TestCase):
                'text': '/testsuite',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
 
-        self.assertEqual(self.bot.postreceive(msg), "Test handler", "Handler doesn't function")
+        self.assertEqual(self.bot._postreceive(msg), "Test handler", "Handler doesn't function")
 
     def test_send_message(self):
         """
@@ -118,7 +118,7 @@ class TestBotMethods(unittest.TestCase):
                'text': '/message',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
 
-        self.assertEqual(self.bot.postreceive(msg), None, "Send message doesn't function")
+        self.assertEqual(self.bot._postreceive(msg), None, "Send message doesn't function")
 
     def test_handler_photo(self):
         """
@@ -137,7 +137,7 @@ class TestBotMethods(unittest.TestCase):
                'date': 1586725459, 'text': '/photo',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
 
-        self.assertEqual(self.bot.postreceive(msg), None, "Send photo doesn't function")
+        self.assertEqual(self.bot._postreceive(msg), None, "Send photo doesn't function")
 
 
 if __name__ == '__main__':

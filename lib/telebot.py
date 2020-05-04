@@ -33,7 +33,7 @@ class Telebot(telepot.Bot):
     def __init__(self, token_id):
         super().__init__(token_id)
         self._handle = collections.defaultdict(list)
-        self.message_loop(self.postreceive)
+        self.message_loop(self._postreceive)
         self.chat_id = None
         self.command = None
         self._is_listen = False
@@ -77,7 +77,7 @@ class Telebot(telepot.Bot):
         self.command = regex_cmd.search(self.command).group(0)
         return tuple(args)
 
-    def postreceive(self, msg):
+    def _postreceive(self, msg):
         """
         Callback for :attr message_loop()
 
