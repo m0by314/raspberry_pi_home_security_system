@@ -19,12 +19,6 @@ class Camera:
     def __init__(self, folder):
         self.camera = PiCamera()
         self.registration_folder = folder
-        self.photo = os.path.join(self.registration_folder, 'photo-' +
-                                  time.strftime("%H%M%S-%Y%m%d") + '.jpeg')
-        self.video_h264 = os.path.join(self.registration_folder,
-                                       'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.h264')
-        self.video_mp4 = os.path.join(self.registration_folder,
-                                      'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.mp4')
         self.record = {}
 
     def start_recording(self, delay=60):
@@ -34,24 +28,29 @@ class Camera:
         :param delay: recording time
         :return: dictionary containing the name of the video and the return code of the recording.
         """
-        self.camera.start_recording(self.video_h264)
+        video_h264 = os.path.join(self.registration_folder,
+                                  'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.h264')
+        video_mp4 = os.path.join(self.registration_folder,
+                                 'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.mp4')
+        self.camera.start_recording(video_h264)
         time.sleep(int(delay))
         self.camera.stop_recording()
 
-        error = self.__convert_h264_to_mp4()
+        error = self.__convert_h264_to_mp4(video_h264, video_mp4)
         self.record = {
-            "name": self.video_mp4,
+            "name": video_mp4,
             "return_code": error,
         }
         return self.record
 
-    def __convert_h264_to_mp4(self):
+    @staticmethod
+    def __convert_h264_to_mp4(h264, mp4):
         """
         Converted the video format h264 in mp4.
 
         :return: error message if conversion is in fail or None
         """
-        command = "MP4Box -add {} {}".format(self.video_h264, self.video_mp4)
+        command = "MP4Box -add {} {}".format(h264, mp4)
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
@@ -66,8 +65,10 @@ class Camera:
 
         :return: photo at format .jpeg
         """
-        self.camera.capture(self.photo)
-        return self.photo
+        photo = os.path.join(self.registration_folder, 'photo-' +
+                             time.strftime("%H%M%S-%Y%m%d") + '.jpeg')
+        self.camera.capture(photo)
+        return photo
 
     def __del__(self):
         self.camera.close()
