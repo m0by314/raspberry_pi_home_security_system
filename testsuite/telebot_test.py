@@ -5,7 +5,7 @@ Testing for telebot package.
 import unittest
 import sys
 import os
-import requests
+
 
 sys.path.insert(0, os.getcwd())
 
