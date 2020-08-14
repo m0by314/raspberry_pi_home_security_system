@@ -28,13 +28,14 @@ class Telebot(telepot.Bot):
                 return bot.send_message("Hello " + args[0])
 
     :param token_id : the token id
+    :param chat_id : your chat_id
     """
 
-    def __init__(self, token_id):
+    def __init__(self, token_id, chat_id):
         super().__init__(token_id)
         self._handle = collections.defaultdict(list)
         self.message_loop(self._postreceive)
-        self.chat_id = None
+        self.chat_id = chat_id
         self.command = None
         self._is_listen = False
 
@@ -62,6 +63,7 @@ class Telebot(telepot.Bot):
         def decorator(func):
             self._handle[cmd].append(func)
             return func
+
         return decorator
 
     def _get_args(self):
@@ -77,19 +79,27 @@ class Telebot(telepot.Bot):
         self.command = regex_cmd.search(self.command).group(0)
         return tuple(args)
 
+    def _authorized_chat_id(self, incoming_chat_id):
+        """
+        check that the incoming chat_id is authorized
+        :param incoming_chat_id: the incoming chat id
+        :return: boolean
+        """
+        return bool(int(self.chat_id) == int(incoming_chat_id))
+
     def _postreceive(self, msg):
         """
         Callback for :attr message_loop()
 
         :param msg: message received
         """
-        self.chat_id = msg['chat']['id']
+        incoming_chat_id = msg['chat']['id']
         self.command = msg['text']
-
-        args = self._get_args()
-
-        for handle in self._handle.get(self.command, []):
-            return handle(*args) if args else handle()
+        if self._authorized_chat_id(incoming_chat_id):
+            args = self._get_args()
+            for handle in self._handle.get(self.command, []):
+                return handle(*args) if args else handle()
+        return None
 
     def send_photo(self, file, msg):
         """

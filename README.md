@@ -14,6 +14,8 @@ The system is started by a systemd service activated at boot time
 * PIR motion sensor module   
 * 3 female-to-female jumper wires   
 * [Tutorial for create your Telegram Bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot)  
+* After starting the bot on your smartphone, you must retrieve your chat_id at the following address : 
+       https://api.telegram.org/botTOKEN/getUpdates
 
 ### Connect the PIR sensor
 
@@ -33,6 +35,7 @@ Upon exiting `raspi-config`, it will ask to reboot.
      TOKEN_ID = 'Your token_id'
      VIDEO_TIME = 60  # duration of video recording
      REGISTRATION_FOLDER = 'tmp/video'  # video recording folder
+     CHAT_ID = 'Your chat_id' 
 ```
 
 ### Installing 
