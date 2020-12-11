@@ -26,5 +26,5 @@ jobs:
         
       - name: Lint code.
         run: |
-          pylint app.py
-          pylint lib/
+          pylint *.py
+          pylint lib/*.py

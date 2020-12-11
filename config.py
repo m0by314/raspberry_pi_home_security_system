@@ -11,4 +11,3 @@ VIDEO_TIME = 60  # duration of video recording in second
 
 # Don't modify this !!!
 REGISTRATION_FOLDER = 'tmp/video'  # video recording folder
-
