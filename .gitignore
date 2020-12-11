@@ -1,3 +1,3 @@
-lib/config.py
+config.py
 tmp/video/*
 testsuite/data.raw

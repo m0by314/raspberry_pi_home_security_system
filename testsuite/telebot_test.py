@@ -5,12 +5,11 @@ Testing for telebot package.
 import unittest
 import sys
 import os
+import site
 
-
-sys.path.insert(0, os.getcwd())
-
+site.addsitedir('..')
 from lib.telebot import Telebot
-from lib.config import TOKEN_ID, REGISTRATION_FOLDER, CHAT_ID
+from config import TOKEN_ID, REGISTRATION_FOLDER, CHAT_ID
 
 if TOKEN_ID == 'Your_token_id' or not os.path.exists(REGISTRATION_FOLDER):
     print("Variables bot_id or registration_folder are not defined in lib/config.py")

@@ -13,7 +13,7 @@ SERVICE_ABSPATH = ${CURPWD}/${SERVICE}
 LINK_PATH = /etc/systemd/system/${SERVICE_NAME}
 DATA = testsuite/data.raw
 
-TOKEN_ID=$$(grep TOKEN_ID lib/config.py | awk ' {print $$3}')
+TOKEN_ID=$$(grep TOKEN_ID config.py | awk ' {print $$3}')
 
 SHELL := /bin/bash
 

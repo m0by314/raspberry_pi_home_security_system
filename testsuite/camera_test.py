@@ -3,18 +3,19 @@
 Testing for camera package
 """
 import unittest
-import sys
 import os
+import site
 
-sys.path.insert(0, os.getcwd())
+site.addsitedir('..')
 from lib.camera import Camera
-from lib.config import REGISTRATION_FOLDER
+from config import REGISTRATION_FOLDER
 
 
 class TestCamera(unittest.TestCase):
     """
     Test for the Camera class
     """
+
     @classmethod
     def setUpClass(cls):
         """
