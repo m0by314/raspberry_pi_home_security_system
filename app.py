@@ -4,7 +4,7 @@ Home surveillance application
 """
 import time
 
-import sys
+
 from lib.camera import Camera
 from lib.telebot import Telebot
 from lib.pir import MotionDetector
