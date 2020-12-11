@@ -3,10 +3,9 @@
 Testing for Pir package
 """
 import unittest
-import sys
-import os
+import site
 
-sys.path.insert(0, os.getcwd())
+site.addsitedir('..')
 from lib.pir import MotionDetector
 
 
