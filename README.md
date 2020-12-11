@@ -1,21 +1,22 @@
 # Home monitoring with a Raspberry Pi and sending notifications with a Telegram bot 
+[![CI](https://github.com/m0by314/RaspberryPi_home_surveillance/workflows/CI/badge.svg?event=push)](https://github.com/m0by314/RaspberryPi_home_surveillance/actions?query=workflow%3ACI)
 
 Tutorial to build a home surveillance system with a raspberry PI and a Telegram bot to send alerts.
 
 ### How it works
 
-When a movement is detected, the application records a video that is sent to your phone by the bot.  
-Once installed, the monitoring system is managed from your smartphone with the bot's commands.  
-The system is started by a systemd service activated at boot time
+- When a movement is detected, the application records a video that is sent to your phone by the Telegram bot.  
+- Once installed, the surveillance system is managed from your smartphone with [bot commands](#Bots-commands) from the Telegram app.  
+- The system is started by a systemd service activated at boot time
 
-### Prerequisites
+### Prerequisites.
 
 * Raspberry Pi Camera Module  
 * PIR motion sensor module   
 * 3 female-to-female jumper wires   
 * [Tutorial for create your Telegram Bot](https://core.telegram.org/bots#3-how-do-i-create-a-bot)  
-* After starting the bot on your smartphone, you must retrieve your chat_id at the following address : 
-       https://api.telegram.org/botTOKEN/getUpdates
+* After starting the bot on your smartphone, you must retrieve your chat_id at the following address:   
+    * https://api.telegram.org/bot<token_id>/getUpdates
 
 ### Connect the PIR sensor
 
