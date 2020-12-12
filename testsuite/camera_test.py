@@ -27,7 +27,7 @@ class TestCamera(unittest.TestCase):
         """
         Create file in REGISTRATION_FOLDER
         """
-        open(REGISTRATION_FOLDER + "tests.txt", 'a').close()
+        open(REGISTRATION_FOLDER + "/tests.txt", 'a').close()
 
     def test_recording(self):
         """
