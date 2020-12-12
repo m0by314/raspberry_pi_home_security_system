@@ -30,7 +30,7 @@ class TestBotMethods(unittest.TestCase):
         """
         Checks if the bot accepts other chats_id than the authorized one
         """
-        self.assertEqual(self.bot._authorized_chat_id(18545452), False, "The method self.bot._authorized_chat_id "
+        self.assertEqual(self.bot._authorized_chat_id(18545452), False, "The method self.bot._authorized_chat_id "        
                                                                         "doesn't work")
 
     def test_bot_status(self):
@@ -70,7 +70,6 @@ class TestBotMethods(unittest.TestCase):
                'date': 1586725459,
                'text': '/testsuite',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
-
         self.assertEqual(self.bot._postreceive(msg), "Test handler", "Handler doesn't function")
 
     def test_send_message(self):
@@ -90,7 +89,6 @@ class TestBotMethods(unittest.TestCase):
                'date': 1586725459,
                'text': '/message',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
-
         self.assertEqual(self.bot._postreceive(msg), None, "Send message doesn't function")
 
     def test_handler_photo(self):
@@ -109,7 +107,6 @@ class TestBotMethods(unittest.TestCase):
                         'type': 'private'},
                'date': 1586725459, 'text': '/photo',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
-
         self.assertEqual(self.bot._postreceive(msg), None, "Send photo doesn't function")
 
 

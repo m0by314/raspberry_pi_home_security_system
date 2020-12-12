@@ -104,7 +104,8 @@ class Telebot(telepot.Bot):
         :param file: photo to send
         :param msg: picture title
         """
-        self.sendPhoto(self.chat_id, photo=open(file, 'rb'), caption=msg)
+        with open(file, 'rb') as photo_file:
+            self.sendPhoto(self.chat_id, photo=photo_file, caption=msg)
 
     def send_message(self, msg):
         """
@@ -124,6 +125,7 @@ class Telebot(telepot.Bot):
         :param msg: video title
         """
         if video["return_code"] is None:
-            super().sendVideo(self.chat_id, video=open(video["name"], 'rb'), caption=msg)
+            with open(video["name"], 'rb') as video_file:
+                super().sendVideo(self.chat_id, video=video_file, caption=msg)
         else:
             super().sendMessage(self.chat_id, video["return_code"])
