@@ -18,7 +18,7 @@ class Camera:
 
     def __init__(self, folder):
         self.camera = PiCamera()
-        self.registration_folder = folder
+        self.registration_folder = os.path.abspath(folder)
         self.record = {}
 
     def start_recording(self, delay=60):
