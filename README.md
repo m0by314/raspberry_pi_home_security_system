@@ -50,7 +50,7 @@ make install
 * /stop   : stop the home monitoring system  
 * /status : show the status of the monitoring system 
 * /photo  : take a picture 
-* /video time=<delay> : records a video, argument time defines the duration of the recording
+* /video < delay > :  records a video, by default delay is 60s 
 * /clean  : remove all files in video folder
 * /help   : show help 
   

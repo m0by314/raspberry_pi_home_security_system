@@ -57,8 +57,9 @@ def on_video(*args):
 
     :param args: arguments of the bot's command
     """
+    delay = args[0] if args else VIDEO_TIME
     bot.send_message("Recording start")
-    return bot.send_video(camera.start_recording(args[0]), "video")
+    return bot.send_video(camera.start_recording(delay), "video")
 
 
 @bot.handler("/help")
@@ -72,8 +73,7 @@ def on_help():
     msg += "\t/stop  : stop the home monitoring system\n"
     msg += "\t/show  : show the status of the monitoring system \n"
     msg += "\t/photo : take a picture\n"
-    msg += "\t/video time=<delay> : records a video, " \
-           "argument time defines the duration of the recording\n"
+    msg += "\t/video <delay> : records a video, by default delay is " + VIDEO_TIME + "s \n"
     msg += "\t/clean : remove all files in video folder\n"
     msg += "\t/help  : show help\n"
     return bot.send_message(msg)

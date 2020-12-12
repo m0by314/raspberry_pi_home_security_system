@@ -2,7 +2,6 @@
 Package to create a telegram bot with the telepot module
 """
 import collections
-import re
 import telepot
 
 
@@ -72,12 +71,9 @@ class Telebot(telepot.Bot):
 
         :return: tuples arguments
         """
-        regex_args = re.compile(r'=(\w+|\d+)')
-        regex_cmd = re.compile(r'^\/\w+')
-
-        args = re.findall(regex_args, self.command)
-        self.command = regex_cmd.search(self.command).group(0)
-        return tuple(args)
+        args = self.command.split()
+        self.command = args[0]
+        return tuple(args[1:])
 
     def _authorized_chat_id(self, incoming_chat_id):
         """
@@ -98,7 +94,7 @@ class Telebot(telepot.Bot):
         if self._authorized_chat_id(incoming_chat_id):
             args = self._get_args()
             for handle in self._handle.get(self.command, []):
-                return handle(*args) if args else handle()
+                return handle(*args)
         return None
 
     def send_photo(self, file, msg):
