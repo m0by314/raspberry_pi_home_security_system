@@ -2,18 +2,17 @@
 
 .DEFAULT: help
 
-CURPWD  := $(shell pwd)
+CURPWD := $(shell pwd)
 
 SERVICE_NAME        = home-security-system.service
 SERVICE_TEMPLATE    := ${CURPWD}/templates/${SERVICE_NAME}.template
 SERVICE             = /usr/lib/systemd/system/${SERVICE_NAME}
 LINK_PATH           = /etc/systemd/system/${SERVICE_NAME}
 
-DATA = testsuite/data.raw
+TOKEN_ID            := $(shell grep TOKEN_ID config.py | awk ' {print $$3" "$$4}')
+DATA                = testsuite/data.raw
 
-TOKEN_ID=$$(grep TOKEN_ID config.py | awk ' {print $$3}')
-
-SHELL := /bin/bash
+SHELL               := /bin/bash
 
 help:
 	@echo -e "Usage :"; \
@@ -51,12 +50,14 @@ install-deps:
 	echo -e "--- Requirements done ---\n"; \
 
 check_token_id:
-	@if test ${TOKEN_ID}x = "Your token_id"x; then \
-	  	echo "Your token_id isn't define in config.py"; \
-	  	echo "Please set your token_id before launch install"; \
-	  	exit; \
-	fi; \
-
+	@if [ "${TOKEN_ID}"x == "'Your token_id'"x ]; then \
+		echo ""; \
+                echo "Your token_id isn't define in config.py"; \
+                echo "Please set your token_id before launch install"; \
+		echo ""; \
+                exit 1; \
+        fi; \
+	
 test:
 	@echo "-------------------"; \
 	echo "---   Testing   ---"; \
@@ -73,9 +74,9 @@ clean: clean-deps
 	echo -e "--- done --\n "; \
 
 clean-deps:
-	sudo apt-get -y remove gpac; \
+	@sudo apt-get -y remove gpac; \
 	pip3 uninstall -y  -r requirements.txt ; \
-	@echo -e "\n--- Remove done ---\n"; \
+	echo -e "\n--- Remove done ---\n"; \
 
 uninstall:text-uninstall clean
 
