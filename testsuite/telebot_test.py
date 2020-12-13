@@ -12,7 +12,7 @@ from lib.telebot import Telebot
 from config import TOKEN_ID, REGISTRATION_FOLDER, CHAT_ID
 
 if TOKEN_ID == 'Your_token_id' or not os.path.exists(REGISTRATION_FOLDER):
-    print("Variables bot_id or registration_folder are not defined in lib/config.py")
+    print("Variables bot_id or registration_folder are not defined in config.py")
     sys.exit(1)
 
 
