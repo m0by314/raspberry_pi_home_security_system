@@ -41,7 +41,7 @@ After this action reboot the raspberry
 
 Before installing set your token_id then:
 ```
-make install
+sudo make install
 ```
 
 ### Bot's commands
@@ -74,7 +74,7 @@ make test
 ### Uninstall
  
 ```
-make uninstall
+sudo make uninstall
 ```
 
 ## Built With
