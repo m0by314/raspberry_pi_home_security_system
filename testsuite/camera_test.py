@@ -8,8 +8,7 @@ import site
 
 site.addsitedir('..')
 from lib.camera import Camera
-from config import REGISTRATION_FOLDER
-
+REGISTRATION_FOLDER = "testsuite/video"
 
 class TestCamera(unittest.TestCase):
     """
@@ -29,6 +28,9 @@ class TestCamera(unittest.TestCase):
         """
         testfile = os.path.join(os.path.abspath(REGISTRATION_FOLDER), "test.txt")
         open(testfile, 'a').close()
+
+    def tearDown(self) -> None:
+        self.camera.purge_records()
 
     def test_recording(self):
         """
