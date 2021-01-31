@@ -3,6 +3,7 @@
 Home surveillance application
 """
 import time
+import subprocess
 
 from gpiozero import CPUTemperature
 from lib.camera import Camera
@@ -71,6 +72,20 @@ def on_temp(*args):
     return bot.send_message(str("CPU temp. : ") + str(temp))
 
 
+@bot.handler("/reboot")
+def on_reboot(*args):
+
+    return bot.send_message("Reboot command sent..")
+    subprocess.call('sudo reboot', shell=True)
+
+
+@bot.handler("/usb")
+def on_usb(*args):
+
+    p = subprocess.Popen("lsusb", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
+    return bot.send_message("str(p))
+
+
 @bot.handler("/help")
 def on_help():
     """
@@ -85,6 +100,8 @@ def on_help():
     msg += "\t/video <delay> : records a video, by default delay is " + str(VIDEO_TIME) + "s \n"
     msg += "\t/clean : remove all files in video folder\n"
     msg += "\t/temp : CPU Temperature\n"
+    msg += "\t/reboot : Reboot RPi\n"
+    msg += "\t/usb : See connected USB devices\n"
     msg += "\t/help  : show help\n"
     return bot.send_message(msg)
 
