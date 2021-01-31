@@ -4,7 +4,7 @@ Home surveillance application
 """
 import time
 
-
+from gpiozero import CPUTemperature
 from lib.camera import Camera
 from lib.telebot import Telebot
 from lib.pir import MotionDetector
@@ -62,6 +62,15 @@ def on_video(*args):
     return bot.send_video(camera.start_recording(delay), "video")
 
 
+@bot.handler("/temp")
+def on_temp(*args):
+
+    cpu = CPUTemperature()
+    temp = cpu.temperature
+
+    return bot.send_message(str("CPU temp. : ") + str(temp))
+
+
 @bot.handler("/help")
 def on_help():
     """
@@ -75,6 +84,7 @@ def on_help():
     msg += "\t/photo : take a picture\n"
     msg += "\t/video <delay> : records a video, by default delay is " + str(VIDEO_TIME) + "s \n"
     msg += "\t/clean : remove all files in video folder\n"
+    msg += "\t/temp : CPU Temperature\n"
     msg += "\t/help  : show help\n"
     return bot.send_message(msg)
 
