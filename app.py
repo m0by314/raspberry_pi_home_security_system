@@ -83,7 +83,7 @@ def on_reboot(*args):
 def on_usb(*args):
 
     p = subprocess.Popen("lsusb", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
-    return bot.send_message("str(p))
+    return bot.send_message(str(p))
 
 
 @bot.handler("/help")
