@@ -75,7 +75,7 @@ def on_temp(*args):
 @bot.handler("/reboot")
 def on_reboot(*args):
 
-    return bot.send_message("Reboot command sent..")
+    bot.send_message("Reboot command sent..")
     subprocess.call('sudo reboot now', shell=True)
 
 
