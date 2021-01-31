@@ -76,7 +76,7 @@ def on_temp(*args):
 def on_reboot(*args):
 
     return bot.send_message("Reboot command sent..")
-    subprocess.call('sudo reboot', shell=True)
+    subprocess.call('sudo reboot now', shell=True)
 
 
 @bot.handler("/usb")
