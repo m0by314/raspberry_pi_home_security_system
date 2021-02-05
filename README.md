@@ -52,6 +52,9 @@ sudo make install
 * /photo  : take a picture 
 * /video < delay > :  records a video, by default delay is 60s 
 * /clean  : remove all files in video folder
+* /temp   : CPU Temperature
+* /reboot : Reboot RPi
+* /usb    : See connected USB devices
 * /help   : show help 
   
 ### Details 		
