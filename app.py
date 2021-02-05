@@ -14,6 +14,7 @@ from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
 camera = Camera(REGISTRATION_FOLDER)
 bot = Telebot(TOKEN_ID, CHAT_ID)
 pir = MotionDetector()
+temp = cpu.temperature
 
 
 @bot.handler("/start")
@@ -64,23 +65,20 @@ def on_video(*args):
 
 
 @bot.handler("/temp")
-def on_temp(*args):
-
-    cpu = CPUTemperature()
-    temp = cpu.temperature
+def on_temp():
 
     return bot.send_message(str("CPU temp. : ") + str(temp))
 
 
 @bot.handler("/reboot")
-def on_reboot(*args):
+def on_reboot():
 
     bot.send_message("Reboot command sent..")
     subprocess.call('sudo reboot now', shell=True)
 
 
 @bot.handler("/usb")
-def on_usb(*args):
+def on_usb():
 
     p = subprocess.Popen("lsusb", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0]
     return bot.send_message(str(p))
