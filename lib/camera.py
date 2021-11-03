@@ -50,11 +50,11 @@ class Camera:
 
         :return: error message if conversion is in fail or None
         """
-        command = "MP4Box -add {} {}".format(h264, mp4)
+        command = F"MP4Box -add {h264} {mp4}"
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
-            error = 'FAIL:\ncmd:{}\noutput:{}'.format(err.cmd, err.output)
+            error = F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}'
             return error
         else:
             return None
@@ -83,7 +83,7 @@ class Camera:
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
-            result = 'FAIL:\ncmd:{}\noutput:{}'.format(err.cmd, err.output)
+            result = F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}'
             return result
         else:
             result = 'The records have been deleted'
