@@ -2,11 +2,11 @@
 """ Home surveillance application """
 import time
 
-
+from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
 from lib.camera import Camera
 from lib.telebot import Telebot
 from lib.pir import MotionDetector
-from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
+
 
 camera = Camera(REGISTRATION_FOLDER)
 bot = Telebot(TOKEN_ID, CHAT_ID)
