@@ -27,7 +27,7 @@ text-install:
 	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"; \
 
 
-install: text-install check_token_id install-deps build-service test
+install: text-install check_token_id install-deps build-service setup-camera test
 
 build-service:
 	@echo "-------------------------"; \
@@ -45,6 +45,7 @@ install-deps:
 	@echo "------------------------"; \
 	echo "---   Requirements   ---"; \
 	echo "------------------------"; \
+	apt-get -y update; \
 	apt-get -y install python3 python3-pip gpac; \
 	pip3 install -r requirements.txt; \
 	echo -e "--- Requirements done ---\n"; \
@@ -57,7 +58,10 @@ check_token_id:
 		echo ""; \
                 exit 1; \
         fi; \
-	
+
+setup-camera:
+	@raspi-config nonint do_camera 0; \
+
 test:
 	@echo "-------------------"; \
 	echo "---   Testing   ---"; \
@@ -71,7 +75,8 @@ clean: clean-deps
 	systemctl stop ${SERVICE_NAME}; \
 	systemctl disable ${SERVICE_NAME}; \
 	rm ${LINK_PATH} ${SERVICE} ${DATA}; \
-	echo -e "--- done --\n "; \
+	echo -e "\n--- Set down camera hardware --- "; \
+	raspi-config nonint do_camera 0; \
 
 clean-deps:
 	@sudo apt-get -y remove gpac; \
