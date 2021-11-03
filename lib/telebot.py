@@ -1,6 +1,4 @@
-"""
-Package to create a telegram bot with the telepot module
-"""
+""" Package to create a telegram bot with the telepot module """
 import collections
 import telepot
 

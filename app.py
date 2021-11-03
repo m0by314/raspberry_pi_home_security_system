@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-"""
-Home surveillance application
-"""
+""" Home surveillance application """
 import time
 
 
@@ -17,36 +15,28 @@ pir = MotionDetector()
 
 @bot.handler("/start")
 def on_start():
-    """
-    command /start: start bot
-    """
+    """ command /start: start bot """
     bot.is_listen = True
     return bot.send_message("Bot start")
 
 
 @bot.handler("/stop")
 def on_stop():
-    """
-    command /stop: stop bot
-    """
+    """ command /stop: stop bot """
     bot.is_listen = False
     return bot.send_message("Bot stop")
 
 
 @bot.handler("/status")
 def on_status():
-    """
-    command /status: show bot status
-    """
+    """ command /status: show bot status """
     return bot.send_message("Listening Motion run") \
         if bot.is_listen else bot.send_message("Listen Motion doesn't run")
 
 
 @bot.handler("/photo")
 def on_photo():
-    """
-    command /photo: take a photo
-    """
+    """ command /photo: take a photo """
     return bot.send_photo(camera.take_photo(), "photo")
 
 
@@ -66,6 +56,7 @@ def on_video(*args):
 def on_help():
     """
     command /help: show help
+
     :return: string
     """
     msg = "command usage:\n"
@@ -81,9 +72,7 @@ def on_help():
 
 @bot.handler("/clean")
 def on_clean():
-    """
-    command /clean: remove file in REGISTRATION_FOLDER
-    """
+    """ command /clean: remove file in REGISTRATION_FOLDER """
     return bot.send_message(camera.purge_records())
 
 

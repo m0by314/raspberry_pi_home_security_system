@@ -1,6 +1,4 @@
-"""
-Package for interfacing with Raspberry PI PIR motion sensor.
-"""
+""" Package for interfacing with Raspberry PI PIR motion sensor. """
 from gpiozero import MotionSensor
 
 

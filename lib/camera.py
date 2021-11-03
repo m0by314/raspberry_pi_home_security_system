@@ -1,6 +1,4 @@
-"""
-Package for interfacing with Raspberry PI camera.
-"""
+""" Package for interfacing with Raspberry PI camera. """
 import subprocess
 import time
 import os
