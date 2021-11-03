@@ -27,7 +27,7 @@ text-install:
 	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"; \
 
 
-install: text-install check_token_id install-deps build-service setup-camera test
+install: text-install check_token_id install-deps build-service test
 
 build-service:
 	@echo "-------------------------"; \
@@ -59,9 +59,6 @@ check_token_id:
                 exit 1; \
         fi; \
 
-setup-camera:
-	@raspi-config nonint do_camera 0; \
-
 test:
 	@echo "-------------------"; \
 	echo "---   Testing   ---"; \
@@ -75,8 +72,7 @@ clean: clean-deps
 	systemctl stop ${SERVICE_NAME}; \
 	systemctl disable ${SERVICE_NAME}; \
 	rm ${LINK_PATH} ${SERVICE} ${DATA}; \
-	echo -e "\n--- Set down camera hardware --- "; \
-	raspi-config nonint do_camera 0; \
+	echo -e "--- done --\n "; \
 
 clean-deps:
 	@sudo apt-get -y remove gpac; \
