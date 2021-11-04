@@ -39,15 +39,16 @@ build-service:
 	fi; \
 	systemctl start ${SERVICE_NAME}; \
 	systemctl enable ${SERVICE_NAME}; \
-	echo -e "--- Build done ---\n"; \
+	echo -e "--- Done ---\n"; \
 
 install-deps:
 	@echo "------------------------"; \
 	echo "---   Requirements   ---"; \
 	echo "------------------------"; \
+	apt-get -y update; \
 	apt-get -y install python3 python3-pip gpac; \
 	pip3 install -r requirements.txt; \
-	echo -e "--- Requirements done ---\n"; \
+	echo -e "--- Done ---\n"; \
 
 check_token_id:
 	@if [ "${TOKEN_ID}"x == "'Your token_id'"x ]; then \
@@ -57,13 +58,13 @@ check_token_id:
 		echo ""; \
                 exit 1; \
         fi; \
-	
+
 test:
 	@echo "-------------------"; \
 	echo "---   Testing   ---"; \
 	echo "-------------------"; \
 	sudo systemctl stop ${SERVICE_NAME}; \
-	python3 -m unittest testsuite/*_test.py; \
+	python3 -m pytest --tb=line testsuite/*_test.py; \
 	sudo systemctl start ${SERVICE_NAME}; \
 
 clean: clean-deps
@@ -71,12 +72,12 @@ clean: clean-deps
 	systemctl stop ${SERVICE_NAME}; \
 	systemctl disable ${SERVICE_NAME}; \
 	rm ${LINK_PATH} ${SERVICE} ${DATA}; \
-	echo -e "--- done --\n "; \
+	echo -e "--- Done --\n "; \
 
 clean-deps:
 	@sudo apt-get -y remove gpac; \
 	pip3 uninstall -y  -r requirements.txt ; \
-	echo -e "\n--- Remove done ---\n"; \
+	echo -e "\n--- Done ---\n"; \
 
 uninstall:text-uninstall clean
 
