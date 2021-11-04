@@ -24,7 +24,7 @@ class TestBotMethods(unittest.TestCase):
 
     def authorised(self):
         """ Checks if the bot accepts other chats_id than the authorized one """
-        self.assertEqual(self.bot._authorized_chat_id(18545452), False, "The method self.bot._authorized_chat_id "        
+        self.assertEqual(self.bot._authorized_chat_id(18545452), False, "The method self.bot._authorized_chat_id "
                                                                         "doesn't work")
 
     def test_bot_status(self):
@@ -43,6 +43,7 @@ class TestBotMethods(unittest.TestCase):
 
     def test_handler(self):
         """ Test handler """
+
         @self.bot.handler("/testsuite")
         def on_test():
             return str("Test handler")
@@ -59,6 +60,7 @@ class TestBotMethods(unittest.TestCase):
 
     def test_send_message(self):
         """ Test send message """
+
         @self.bot.handler("/message")
         def on_test():
             return self.bot.send_message("Test send message")
@@ -71,10 +73,14 @@ class TestBotMethods(unittest.TestCase):
                'date': 1586725459,
                'text': '/message',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
-        self.assertEqual(self.bot._postreceive(msg), None, "Send message doesn't function")
+        try:
+            self.assertEqual(self.bot._postreceive(msg), None, "Send message doesn't function")
+        except BaseException as err:
+            self.fail(err)
 
     def test_handler_photo(self):
         """ Test send photo """
+
         @self.bot.handler("/photo")
         def on_test_photo():
             return self.bot.send_photo('testsuite/logo-ok.png', "Testsuite")
@@ -86,7 +92,10 @@ class TestBotMethods(unittest.TestCase):
                         'type': 'private'},
                'date': 1586725459, 'text': '/photo',
                'entities': [{'offset': 0, 'length': 6, 'type': 'bot_command'}]}
-        self.assertEqual(self.bot._postreceive(msg), None, "Send photo doesn't function")
+        try:
+            self.assertEqual(self.bot._postreceive(msg), None, "Send photo doesn't function")
+        except BaseException as err:
+            self.fail(err)
 
 
 if __name__ == '__main__':
