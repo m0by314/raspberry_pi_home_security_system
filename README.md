@@ -78,7 +78,12 @@ sudo make uninstall
 ```
 
 ## Built With
+### Hardware:
+* Raspberry Pi Zero WH
+* Infrared Camera v2 8MP
+* HC-SR501 PIR Motion Sensor Module
 
+### Libraries:
 * [gpiozero](https://pypi.org/project/gpiozero/)
 * [telepot](https://pypi.org/project/telepot/)  
 * [picamera](https://pypi.org/project/picamera/) 
