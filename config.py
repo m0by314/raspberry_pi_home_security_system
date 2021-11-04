@@ -1,6 +1,4 @@
-"""
-configuration file
-"""
+""" Configuration file """
 
 # Variable to configure
 TOKEN_ID = 'Your token_id'
