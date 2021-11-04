@@ -29,7 +29,6 @@ sudo raspi-config nonint do_camera 0
 After this action reboot the raspberry
 
 ## Setup
- * `cp config_template.py config.py`  
  * Open the `config.py` file and configure the TOKEN_ID and CHAT_ID variables with your token_id and your chat_id  
  ```
      # Variable to configure
