@@ -3,3 +3,4 @@ urllib3==1.26.5
 RPi.GPIO==0.7.0
 picamera==1.13
 gpiozero==1.5.0
+pytest==6.2.5
