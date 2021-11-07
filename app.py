@@ -1,87 +1,160 @@
 #!/usr/bin/env python
 """ Home surveillance application """
-import time
+from functools import wraps
+from telegram import Update, Bot
 
+from telegram.ext import (
+    Updater,
+    CommandHandler,
+    CallbackContext,
+)
 from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
+
 from lib.camera import Camera
-from lib.telebot import Telebot
-from lib.pir import MotionDetector
+from lib.pir import movement_detected
+from lib.home_surveillance import HomeSurveillance
 
 
+# Create an instance of the telegram.Bot
+bot = Bot(token=TOKEN_ID)
+
+# Create an instance of the camera
 camera = Camera(REGISTRATION_FOLDER)
-bot = Telebot(TOKEN_ID, CHAT_ID)
-pir = MotionDetector()
+
+# Create an instance of HomeSurveillance
+surveillance = HomeSurveillance()
 
 
-@bot.handler("/start")
-def on_start():
-    """ command /start: start bot """
-    bot.is_listen = True
-    return bot.send_message("Bot start")
+def restricted(func):
+    """Restrict usage of func to allowed users only and replies if necessary"""
+    @wraps(func)
+    def wrapped(update, context, *args, **kwargs):
+        chat_id = update.effective_chat.id
+        if int(chat_id) != int(CHAT_ID):
+            update.message.reply_text('Unauthorized access.')
+            return None  # quit function
+        return func(update, context, *args, **kwargs)
+    return wrapped
 
 
-@bot.handler("/stop")
-def on_stop():
-    """ command /stop: stop bot """
-    bot.is_listen = False
-    return bot.send_message("Bot stop")
+###############
+# Bot command #
+###############
 
 
-@bot.handler("/status")
-def on_status():
-    """ command /status: show bot status """
-    return bot.send_message("Listening Motion run") \
-        if bot.is_listen else bot.send_message("Listen Motion doesn't run")
+@restricted
+def start(update: Update, context: CallbackContext) -> None:
+    """Command /start: start surveillance."""
+    surveillance.start()
+    context.bot.send_message(chat_id=CHAT_ID, text="Surveillance is start")
 
 
-@bot.handler("/photo")
-def on_photo():
-    """ command /photo: take a photo """
-    return bot.send_photo(camera.take_photo(), "photo")
+@restricted
+def stop(update: Update, context: CallbackContext) -> None:
+    """Command /stop: stop surveillance."""
+    surveillance.stop()
+    context.bot.send_message(chat_id=CHAT_ID, text="Surveillance is stop")
 
 
-@bot.handler("/video")
-def on_video(*args):
+@restricted
+def status(update: Update, context: CallbackContext) -> None:
+    """Command /status: show surveillance status."""
+    context.bot.send_message(
+        chat_id=CHAT_ID,
+        text="Surveillance is active" if surveillance.is_start else "Surveillance is deactivated"
+    )
+
+
+@restricted
+def man(update: Update, context: CallbackContext) -> None:
+    """Command /help: show help."""
+    usage = "command help:\n"
+    usage += "\t/start : start the home monitoring system \n"
+    usage += "\t/stop  : stop the home monitoring system\n"
+    usage += "\t/status  : show the status of the monitoring system \n"
+    usage += "\t/photo : take a picture\n"
+    usage += "\t/video time=<duration> : records a video, \
+                by default duration is " + str(VIDEO_TIME) + "s \n"
+    usage += "\t/clean : remove all files in video folder\n"
+    usage += "\t/help  : show help\n"
+    context.bot.send_message(chat_id=CHAT_ID, text=usage)
+
+
+@restricted
+def photo(update: Update, context: CallbackContext) -> None:
+    """ Command /photo: take a photo"""
+    with open(camera.take_photo(), 'rb') as img:
+        context.bot.send_photo(chat_id=CHAT_ID, photo=img)
+
+
+@restricted
+def video(update: Update, context: CallbackContext) -> None:
     """
-    command /video: record a video
-
-    :param args: arguments of the bot's command
+    Command /video: record a video
+    Takes an argument named time, corresponds to the duration of the video
     """
-    delay = args[0] if args else VIDEO_TIME
-    bot.send_message("Recording start")
-    return bot.send_video(camera.start_recording(delay), "video")
-
-
-@bot.handler("/help")
-def on_help():
-    """
-    command /help: show help
-
-    :return: string
-    """
-    msg = "command usage:\n"
-    msg += "\t/start : start the home monitoring system \n"
-    msg += "\t/stop  : stop the home monitoring system\n"
-    msg += "\t/status  : show the status of the monitoring system \n"
-    msg += "\t/photo : take a picture\n"
-    msg += "\t/video <delay> : records a video, by default delay is " + str(VIDEO_TIME) + "s \n"
-    msg += "\t/clean : remove all files in video folder\n"
-    msg += "\t/help  : show help\n"
-    return bot.send_message(msg)
-
-
-@bot.handler("/clean")
-def on_clean():
-    """ command /clean: remove file in REGISTRATION_FOLDER """
-    return bot.send_message(camera.purge_records())
-
-
-print('I am listening ...')
-try:
-    while True:
-        if bot.is_listen and pir.movement_detected():
-            bot.send_video(camera.start_recording(VIDEO_TIME), 'motion detected')
+    # Default video time
+    duration = VIDEO_TIME
+    # Parse args to get duration value
+    if context.args:
+        key, value = context.args[0].split('=')
+        if key == 'time':
+            duration = value
         else:
-            time.sleep(1)
-except KeyboardInterrupt:
-    del camera
+            context.bot.send_message(chat_id=CHAT_ID, text=F"Argument {key} not recognized")
+    # Start video recording
+    record = camera.start_recording(duration)
+    if record["error"] is None:
+        with open(record["name"], 'rb') as video_file:
+            bot.send_video(chat_id=CHAT_ID, video=video_file)
+    else:
+        bot.send_message(chat_id=CHAT_ID, text=video["error"])
+
+
+@restricted
+def clean(update: Update, context: CallbackContext) -> None:
+    """ command /clean: remove file in REGISTRATION_FOLDER """
+    context.bot.send_message(chat_id=CHAT_ID, text=camera.purge_records())
+
+
+def main() -> None:
+    """Run the bot."""
+    # Create the Updater and pass it your bot's token.
+    updater = Updater(TOKEN_ID)
+
+    # Get the dispatcher to register handlers
+    dispatcher = updater.dispatcher
+
+    # on different commands - answer in Telegram
+    dispatcher.add_handler(CommandHandler("start", start))
+    dispatcher.add_handler(CommandHandler("stop", stop))
+    dispatcher.add_handler(CommandHandler("status", status))
+    dispatcher.add_handler(CommandHandler("help", man))
+    dispatcher.add_handler(CommandHandler("photo", photo))
+    dispatcher.add_handler(CommandHandler("video", video, pass_args=True))
+    dispatcher.add_handler(CommandHandler("clean", clean))
+
+    # Start the Bot
+    updater.start_polling()
+
+    # Infinite loop for motion detection,
+    # if motion is detected and surveillance is activated a video recording is taken
+    # and sent through the telegram bot.
+
+    while True:
+        if surveillance.is_start and movement_detected():
+            record = camera.start_recording(VIDEO_TIME)
+            if record["error"] is None:
+                with open(record["name"], 'rb') as video_file:
+                    bot.send_video(chat_id=CHAT_ID, video=video_file, caption="Motion detected")
+            else:
+                bot.send_message(chat_id=CHAT_ID, text=video["error"])
+
+    # Run the bot until you press Ctrl-C or the process receives SIGINT,
+    # SIGTERM or SIGABRT. This should be used most of the time, since
+    # start_polling() is non-blocking and will stop the bot gracefully.
+    updater.idle()
+
+
+if __name__ == '__main__':
+    main()

@@ -37,7 +37,7 @@ class Camera:
         error = self.__convert_h264_to_mp4(video_h264, video_mp4)
         self.record = {
             "name": video_mp4,
-            "return_code": error,
+            "error": error,
         }
         return self.record
 

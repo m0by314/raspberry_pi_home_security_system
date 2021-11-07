@@ -8,6 +8,7 @@ site.addsitedir('..')
 from lib.camera import Camera
 REGISTRATION_FOLDER = "testsuite/video"
 
+
 class TestCamera(unittest.TestCase):
     """ Test for the Camera class """
 
@@ -27,7 +28,7 @@ class TestCamera(unittest.TestCase):
     def test_recording(self):
         """ Test method camera.start_recording() """
         video = self.camera.start_recording(10)
-        self.assertEqual(video["return_code"], None,
+        self.assertEqual(video["error"], None,
                          "ERROR: during recording video[\"return_code\"]")
 
     def test_take_photo(self):

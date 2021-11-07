@@ -45,11 +45,11 @@ sudo make install
 
 ### Bot's commands
 
-* /start  : start the home monitoring system 
-* /stop   : stop the home monitoring system  
-* /status : show the status of the monitoring system 
+* /start  : start the home surveillance  
+* /stop   : stop the home surveillance  
+* /status : show the status of home surveillance  
 * /photo  : take a picture 
-* /video < delay > :  records a video, by default delay is 60s 
+* /video time=<duration> :  records a video, by default delay is 60s 
 * /clean  : remove all files in video folder
 * /help   : show help 
   
@@ -57,12 +57,7 @@ sudo make install
 
   * By default, the duration of the video is set to 60s. If you want change this, you need to modify the VIDEO_TIME constant in `config.py`    		
 
-  * It's possible to add other commands to the bot in `app.py` with the decorator @bot.handler()		
- ```		
- @bot.handler("/hello")		
- def func_hello():		
-     return bot.send_message("Hello World")		
- ```
+  * It's possible to add other commands to the bot in `app.py`
  
 ### Testing
  
@@ -84,5 +79,5 @@ sudo make uninstall
 
 ### Libraries:
 * [gpiozero](https://pypi.org/project/gpiozero/)
-* [telepot](https://pypi.org/project/telepot/)  
+* [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)  
 * [picamera](https://pypi.org/project/picamera/) 
