@@ -31,8 +31,8 @@ def restricted(func):
     @wraps(func)
     def wrapped(update, context, *args, **kwargs):
         chat_id = update.effective_chat.id
-        if chat_id != CHAT_ID:
-            context.message.reply_text('Unauthorized access.')
+        if str(chat_id) != str(CHAT_ID):
+            update.message.reply_text('Unauthorized access.')
             return None  # quit function
         return func(update, context, *args, **kwargs)
     return wrapped
