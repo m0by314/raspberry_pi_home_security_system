@@ -27,7 +27,18 @@ text-install:
 	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"; \
 
 
-install: text-install check_token_id install-deps build-service test
+install: text-install install-deps build-service set-up-camera reboot
+
+set-up-camera:
+	@raspi-config nonint do_camera 0; \
+
+set-down-camera:
+	@raspi-config nonint do_camera 1; \
+
+reboot:
+	@echo "Reboot necessary to finish"; \
+	echo "The raspberry will reboot in 10 seconds"; \
+	shutdown -r -t 10; \
 
 build-service:
 	@echo "-------------------------"; \
@@ -54,12 +65,12 @@ check_token_id:
 	@if [ "${TOKEN_ID}"x == "'Your token_id'"x ]; then \
 		echo ""; \
                 echo "Your token_id isn't define in config.py"; \
-                echo "Please set your token_id before launch install"; \
+                echo "Please set your token_id"; \
 		echo ""; \
                 exit 1; \
         fi; \
 
-test:
+test: check_token_id
 	@echo "-------------------"; \
 	echo "---   Testing   ---"; \
 	echo "-------------------"; \
@@ -79,7 +90,7 @@ clean-deps:
 	pip3 uninstall -y  -r requirements.txt ; \
 	echo -e "\n--- Done ---\n"; \
 
-uninstall:text-uninstall clean
+uninstall:text-uninstall clean set-down-camera reboot
 
 text-uninstall:
 	@echo "---------------------"; \
