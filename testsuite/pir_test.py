@@ -4,19 +4,15 @@ import unittest
 import site
 
 site.addsitedir('..')
-from lib.pir import MotionDetector
+from lib.pir import movement_detected
 
 
 class TestPir(unittest.TestCase):
-    """ Test for the Pir class """
-    @classmethod
-    def setUpClass(cls):
-        """ Initialize Motiondetector class """
-        cls.pir = MotionDetector()
+    """ Test for the Pir function """
 
     def test_movement_detected(self):
-        """ Test method pir.movement_detected() """
-        self.assertFalse(self.pir.movement_detected())
+        """ Test function movement_detected() """
+        self.assertFalse(movement_detected())
 
 
 if __name__ == '__main__':
