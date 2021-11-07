@@ -2,13 +2,12 @@
 """Testing Bot"""
 import unittest
 import sys
-import os
 import telegram
 
-from config import TOKEN_ID, REGISTRATION_FOLDER, CHAT_ID
+from config import TOKEN_ID, CHAT_ID
 
-if TOKEN_ID == 'Your_token_id' or not os.path.exists(REGISTRATION_FOLDER):
-    print("Variables bot_id or registration_folder are not defined in config.py")
+if TOKEN_ID == 'Your_token_id':
+    print("Your token_id is not defined in config.py")
     sys.exit(1)
 
 
