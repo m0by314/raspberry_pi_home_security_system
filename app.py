@@ -6,7 +6,6 @@ from telegram import Update, Bot
 from telegram.ext import (
     Updater,
     CommandHandler,
-    Filters,
     CallbackContext,
 )
 from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
@@ -31,7 +30,7 @@ def restricted(func):
     @wraps(func)
     def wrapped(update, context, *args, **kwargs):
         chat_id = update.effective_chat.id
-        if str(chat_id) != str(CHAT_ID):
+        if int(chat_id) != int(CHAT_ID):
             update.message.reply_text('Unauthorized access.')
             return None  # quit function
         return func(update, context, *args, **kwargs)
@@ -127,14 +126,13 @@ def main() -> None:
     dispatcher = updater.dispatcher
 
     # on different commands - answer in Telegram
-    dispatcher.add_handler(CommandHandler("start", start, Filters.chat(chat_id=CHAT_ID)))
-    dispatcher.add_handler(CommandHandler("stop", stop, Filters.chat(chat_id=CHAT_ID)))
-    dispatcher.add_handler(CommandHandler("status", status, Filters.chat(chat_id=CHAT_ID)))
-    dispatcher.add_handler(CommandHandler("help", man, Filters.chat(chat_id=CHAT_ID)))
-    dispatcher.add_handler(CommandHandler("photo", photo, Filters.chat(chat_id=CHAT_ID)))
-    dispatcher.add_handler(CommandHandler("video", video,
-                                          Filters.chat(chat_id=CHAT_ID), pass_args=True))
-    dispatcher.add_handler(CommandHandler("clean", clean, Filters.chat(chat_id=CHAT_ID)))
+    dispatcher.add_handler(CommandHandler("start", start))
+    dispatcher.add_handler(CommandHandler("stop", stop))
+    dispatcher.add_handler(CommandHandler("status", status))
+    dispatcher.add_handler(CommandHandler("help", man))
+    dispatcher.add_handler(CommandHandler("photo", photo))
+    dispatcher.add_handler(CommandHandler("video", video, pass_args=True))
+    dispatcher.add_handler(CommandHandler("clean", clean))
 
     # Start the Bot
     updater.start_polling()
