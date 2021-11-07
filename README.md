@@ -22,12 +22,6 @@ Tutorial to build a home security system with Raspberry Pi and sending notificat
 
 ![image](img/pir-diagram.png)
 
-## Setting up the camera hardware
-```
-sudo raspi-config nonint do_camera 0
-```
-After this action reboot the raspberry
-
 ## Setup
  * Open the `config.py` file and configure the TOKEN_ID and CHAT_ID variables with your token_id and your chat_id  
  ```
@@ -38,7 +32,9 @@ After this action reboot the raspberry
 
 ### Installing 
 
-Before installing set your token_id then:
+The installation requires root rights:
+
+**A reboot will be done at the end of the installation to activate the camera hardware**
 ```
 sudo make install
 ```
@@ -70,6 +66,7 @@ make test
 ```
 sudo make uninstall
 ```
+**A reboot will be done at the end to deactivate the camera hardware**
 
 ## Built With
 ### Hardware:
