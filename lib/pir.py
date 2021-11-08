@@ -1,9 +1,13 @@
 """ Package for interfacing with Raspberry PI PIR motion sensor. """
-from gpiozero import MotionSensor
+import RPi.GPIO as GPIO
 
-pir = MotionSensor(4)
+PIR_PIN = 4
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(PIR_PIN, GPIO.IN)
 
 
 def movement_detected() -> bool:
     """Check if movement detected."""
-    return bool(pir.motion_detected)
+    return GPIO.input(PIR_PIN)
