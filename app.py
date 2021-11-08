@@ -142,7 +142,7 @@ def main() -> None:
     # and sent through the telegram bot.
 
     while True:
-        if surveillance.is_start and movement_detected():
+        if surveillance.is_start and movement_detected:
             record = camera.start_recording(VIDEO_TIME)
             if record["error"] is None:
                 with open(record["name"], 'rb') as video_file:
