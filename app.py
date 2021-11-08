@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """ Home surveillance application """
+import time
 from functools import wraps
 from telegram import Update, Bot
 
@@ -142,13 +143,16 @@ def main() -> None:
     # and sent through the telegram bot.
 
     while True:
-        if surveillance.is_start and movement_detected:
+        if surveillance.is_start and movement_detected():
             record = camera.start_recording(VIDEO_TIME)
             if record["error"] is None:
                 with open(record["name"], 'rb') as video_file:
                     bot.send_video(chat_id=CHAT_ID, video=video_file, caption="Motion detected")
             else:
                 bot.send_message(chat_id=CHAT_ID, text=video["error"])
+            time.sleep(5)
+        else:
+            time.sleep(1)
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
