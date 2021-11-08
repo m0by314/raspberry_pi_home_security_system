@@ -11,7 +11,7 @@ from telegram.ext import (
 )
 
 from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
-from lib.pir import movement_detected
+from lib.pir import motion_detected
 from lib.camera import Camera
 from lib.home_surveillance import HomeSurveillance
 
@@ -142,15 +142,14 @@ def main() -> None:
     # if motion is detected and surveillance is activated a video recording is taken
     # and sent through the telegram bot.
     while True:
-        print(movement_detected())
-        if surveillance.is_start and movement_detected():
+        if surveillance.is_start and motion_detected():
             record = camera.start_recording(VIDEO_TIME)
             if record["error"] is None:
                 with open(record["name"], 'rb') as video_file:
                     bot.send_video(chat_id=CHAT_ID, video=video_file, caption="Motion detected")
             else:
                 bot.send_message(chat_id=CHAT_ID, text=video["error"])
-
+        time.sleep(1)
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
