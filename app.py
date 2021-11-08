@@ -2,19 +2,25 @@
 """ Home surveillance application """
 import time
 from functools import wraps
-from telegram import Update, Bot
+import RPi.GPIO
 
+from telegram import Update, Bot
 from telegram.ext import (
     Updater,
     CommandHandler,
     CallbackContext,
 )
-from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
 
+from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
 from lib.camera import Camera
-from lib.pir import movement_detected
 from lib.home_surveillance import HomeSurveillance
 
+
+# Setup PIR Sensor
+PIR_PIN = 4
+RPi.GPIO.setmode(RPi.GPIO.BCM)
+RPi.GPIO.setwarnings(False)
+RPi.GPIO.setup(PIR_PIN, RPi.GPIO.IN)
 
 # Create an instance of the telegram.Bot
 bot = Bot(token=TOKEN_ID)
@@ -141,18 +147,17 @@ def main() -> None:
     # Infinite loop for motion detection,
     # if motion is detected and surveillance is activated a video recording is taken
     # and sent through the telegram bot.
-
+    time.sleep(2)  # We wait for 1 second to settle the sensor
     while True:
-        if surveillance.is_start and movement_detected():
+        if surveillance.is_start and RPi.GPIO.input(PIR_PIN):
             record = camera.start_recording(VIDEO_TIME)
             if record["error"] is None:
                 with open(record["name"], 'rb') as video_file:
                     bot.send_video(chat_id=CHAT_ID, video=video_file, caption="Motion detected")
             else:
                 bot.send_message(chat_id=CHAT_ID, text=video["error"])
-            time.sleep(5)
-        else:
-            time.sleep(1)
+            time.sleep(5)  # the sensor signal moves from high to low, it take around 5 seconds
+        time.sleep(1)
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
