@@ -77,7 +77,7 @@ class Camera:
 
         :return: deletion result
         """
-        command = "cd " + self.registration_folder + " && rm *"
+        command = "cd " + self.registration_folder + " && rm -f *"
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
