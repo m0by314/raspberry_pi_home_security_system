@@ -27,7 +27,7 @@ text-install:
 	echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"; \
 
 
-install: text-install install-deps build-service set-up-camera reboot
+install: text-install check_token_id install-deps build-service set-up-camera reboot
 
 set-up-camera:
 	@raspi-config nonint do_camera 0; \
