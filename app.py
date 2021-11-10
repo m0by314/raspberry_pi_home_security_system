@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """ Home surveillance application """
-import time
+import sys
 from functools import wraps
 
 from picamera import PiCamera
@@ -12,23 +12,24 @@ from telegram.ext import (
 )
 
 from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
+
 from lib.pir import motion_detected
 from lib.camera import Camera
-from lib.bot import PrivateBot
+from lib.bot import SenderBot
 from lib.home_surveillance import HomeSurveillance
 
 
 # Create an instance of the telegram.Bot
 telegram_bot = Bot(token=TOKEN_ID)
 
-# Create an instance of the PrivateBot
-bot = PrivateBot(TOKEN_ID, CHAT_ID)
+# Create an instance for the SenderBot
+sender_bot = SenderBot(telegram_bot, CHAT_ID)
 
 # Create an instance of the camera
 camera = Camera(PiCamera(), REGISTRATION_FOLDER, VIDEO_TIME)
 
 # Create an instance of HomeSurveillance
-surveillance = HomeSurveillance(camera, bot, motion_detected)
+surveillance = HomeSurveillance(camera, sender_bot, motion_detected)
 
 
 def restricted(func):
@@ -145,17 +146,16 @@ def main() -> None:
     # Start the Bot
     updater.start_polling()
 
-    # Infinite loop for motion detection,
-    # if motion is detected and surveillance is activated a video recording is taken
-    # and sent through the telegram bot.
-    while not surveillance.is_close:
-        surveillance.run()
-        time.sleep(1)
+    # Infinite loop, if a motion is detected and surveillance is start
+    # a video recording is taken and sent through the telegram bot.
+    surveillance.run_loop()
 
-    # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # SIGTERM or SIGABRT. This should be used most of the time, since
-    # start_polling() is non-blocking and will stop the bot gracefully.
-    updater.idle()
+    # When the loop is stop, the bot is stop before exit
+    print("Stop the bot")
+    updater.stop()
+
+    print("Exit")
+    sys.exit(0)
 
 
 if __name__ == '__main__':

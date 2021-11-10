@@ -1,9 +1,9 @@
-"""PrivateBot interface"""
+"""SenderBot interface"""
 
 
-class PrivateBot:
+class SenderBot:
     """
-    Interface with Telegram bot, for send message and video only on your chat_id room
+    Interface with Telegram bot, for send message and video only to your chat_id
 
     :param bot: Telegram bot instance
     :param chat_id: Your chat_id
@@ -14,7 +14,7 @@ class PrivateBot:
 
     def send_message(self, msg):
         """
-        Send message on your chat_id.
+        Send message to your chat_id.
 
         :param msg: message as string
         """
@@ -22,7 +22,7 @@ class PrivateBot:
 
     def send_video(self, video_rb):
         """
-        Send video on your chat_id.
+        Send video to your chat_id.
 
         :param video_rb: video file open in 'rb'
         """

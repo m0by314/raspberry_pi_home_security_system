@@ -1,5 +1,6 @@
 """Home Surveillance packages"""
 import signal
+import time
 
 
 class HomeSurveillance:
@@ -18,21 +19,22 @@ class HomeSurveillance:
         # Status of the HomeSurveillance
         self._is_start = False
 
-        # Status for signal closing
-        self.__is_close = False
+        # Infinite loop is running status
+        self.__loop_run = True
 
         # Action for signal SIGINT and SIGTERM
-        signal.signal(signal.SIGINT, self._close)
-        signal.signal(signal.SIGTERM, self._close)
+        signal.signal(signal.SIGINT, self._signal_handler)
+        signal.signal(signal.SIGTERM, self._signal_handler)
 
     @property
-    def is_close(self):
-        """Signal closing status"""
-        return self.__is_close
+    def loop_is_run(self):
+        """Show status of infinity loop run"""
+        return self.__loop_run
 
-    def _close(self, *args):
+    def _signal_handler(self, *args):
         """Handler for signal.signal"""
-        self.__is_close = True
+        print("\nExiting HomeSurveillance")
+        self.__loop_run = False
 
     @property
     def is_start(self) -> bool:
@@ -47,14 +49,16 @@ class HomeSurveillance:
         """Home Surveillance Stop."""
         self._is_start = False
 
-    def run(self):
+    def run_loop(self):
         """
-        Motion detection, if motion is detected and surveillance is activated
+        Run infinite loop for Motion detection, if motion is detected and surveillance is activated
         a video recording is taken and sent through the telegram bot
         """
-        if self.is_start and self._motion_detector():
-            try:
-                with open(self._camera.start_recording(), 'rb') as video_file:
-                    self._bot.send_video(video_file)
-            except SystemError as err:
-                self._bot.send_message(err)
+        while self.__loop_run:
+            if self.is_start and self._motion_detector:
+                try:
+                    with open(self._camera.start_recording(), 'rb') as video_file:
+                        self._bot.send_video(video_file)
+                except SystemError as err:
+                    self._bot.send_message(err)
+            time.sleep(1)
