@@ -12,18 +12,27 @@ class SenderBot:
         self.__bot = bot
         self.__chat_id = chat_id
 
-    def send_message(self, msg):
+    def send_message(self, text):
         """
         Send message to your chat_id.
 
-        :param msg: message as string
+        :param text: message as string
         """
-        self.__bot(chat_id=self.__chat_id, text=msg)
+        self.__bot.send_message(chat_id=self.__chat_id, text=text)
 
-    def send_video(self, video_rb):
+    def send_video(self, video):
         """
         Send video to your chat_id.
 
-        :param video_rb: video file open in 'rb'
+        :param video: video file open in 'rb'
         """
-        self.__bot(chat_id=self.__chat_id, video=video_rb)
+        self.__bot.send_video(chat_id=self.__chat_id, video=video)
+
+    def send_photo(self, photo, caption):
+        """
+        Send video to your chat_id.
+
+        :param photo: video file open in 'rb'
+        :param caption: message as string
+        """
+        self.__bot.send_photo(chat_id=self.__chat_id, photo=photo, caption=caption)
