@@ -3,6 +3,7 @@
 import time
 from functools import wraps
 
+from picamera import PiCamera
 from telegram import Update, Bot
 from telegram.ext import (
     Updater,
@@ -13,17 +14,21 @@ from telegram.ext import (
 from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
 from lib.pir import motion_detected
 from lib.camera import Camera
+from lib.bot import PrivateBot
 from lib.home_surveillance import HomeSurveillance
 
 
 # Create an instance of the telegram.Bot
-bot = Bot(token=TOKEN_ID)
+telegram_bot = Bot(token=TOKEN_ID)
+
+# Create an instance of the PrivateBot
+bot = PrivateBot(TOKEN_ID, CHAT_ID)
 
 # Create an instance of the camera
-camera = Camera(REGISTRATION_FOLDER)
+camera = Camera(PiCamera(), REGISTRATION_FOLDER, VIDEO_TIME)
 
 # Create an instance of HomeSurveillance
-surveillance = HomeSurveillance()
+surveillance = HomeSurveillance(camera, bot, motion_detected)
 
 
 def restricted(func):
@@ -94,8 +99,7 @@ def video(update: Update, context: CallbackContext) -> None:
     Command /video: record a video
     Takes an argument named time, corresponds to the duration of the video
     """
-    # Default video time
-    duration = VIDEO_TIME
+    duration = None
     # Parse args to get duration value
     if context.args:
         key, value = context.args[0].split('=')
@@ -103,19 +107,22 @@ def video(update: Update, context: CallbackContext) -> None:
             duration = value
         else:
             context.bot.send_message(chat_id=CHAT_ID, text=F"Argument {key} not recognized")
+
     # Start video recording
-    record = camera.start_recording(duration)
-    if record["error"] is None:
-        with open(record["name"], 'rb') as video_file:
-            bot.send_video(chat_id=CHAT_ID, video=video_file)
-    else:
-        bot.send_message(chat_id=CHAT_ID, text=video["error"])
+    try:
+        with open(camera.start_recording(duration), 'rb') as video_file:
+            context.bot.send_message(chat_id=CHAT_ID, video=video_file)
+    except SystemError as err:
+        context.bot.send_message(chat_id=CHAT_ID, text=err)
 
 
 @restricted
 def clean(update: Update, context: CallbackContext) -> None:
     """ command /clean: remove file in REGISTRATION_FOLDER """
-    context.bot.send_message(chat_id=CHAT_ID, text=camera.purge_records())
+    try:
+        context.bot.send_message(chat_id=CHAT_ID, text=camera.purge_records())
+    except SystemError as err:
+        context.bot.send_message(chat_id=CHAT_ID, text=err)
 
 
 def main() -> None:
@@ -141,15 +148,10 @@ def main() -> None:
     # Infinite loop for motion detection,
     # if motion is detected and surveillance is activated a video recording is taken
     # and sent through the telegram bot.
-    while True:
-        if surveillance.is_start and motion_detected():
-            record = camera.start_recording(VIDEO_TIME)
-            if record["error"] is None:
-                with open(record["name"], 'rb') as video_file:
-                    bot.send_video(chat_id=CHAT_ID, video=video_file, caption="Motion detected")
-            else:
-                bot.send_message(chat_id=CHAT_ID, text=video["error"])
+    while not surveillance.is_close:
+        surveillance.run()
         time.sleep(1)
+
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
