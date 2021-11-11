@@ -1,8 +1,6 @@
 # Home security system with Raspberry Pi and sending notifications with a Telegram bot 
 [![Linter](https://github.com/m0by314/Raspberry_Pi_home_security_system/workflows/CI/badge.svg?event=push)](https://github.com/m0by314/Raspberry_Pi_home_security_system/actions?query=workflow%3ACI)
 
-[![Coverage Status](https://coveralls.io/repos/github/m0by314/raspberry_pi_home_security_system/badge.svg?branch=master)](https://coveralls.io/github/m0by314/raspberry_pi_home_security_system?branch=master)
-
 Tutorial to build a home security system with Raspberry Pi and sending notifications with a Telegram bot.
 
 ### How it works
