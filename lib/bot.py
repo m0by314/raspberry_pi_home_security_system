@@ -20,13 +20,13 @@ class SenderBot:
         """
         self.__bot.send_message(chat_id=self.__chat_id, text=text)
 
-    def send_video(self, video):
+    def send_video(self, video, caption):
         """
         Send video to your chat_id.
 
         :param video: video file open in 'rb'
         """
-        self.__bot.send_video(chat_id=self.__chat_id, video=video)
+        self.__bot.send_video(chat_id=self.__chat_id, video=video, caption=caption)
 
     def send_photo(self, photo, caption):
         """

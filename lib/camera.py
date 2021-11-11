@@ -11,7 +11,7 @@ class Camera:
 
     :param folder: allows you to define the folder where the records are stored.
     """
-    def __init__(self, camera ,folder: str, delay: int):
+    def __init__(self, camera, folder: str, delay: int):
         self.__camera = camera
         self.__registration_folder = os.path.abspath(folder)
         self.__delay = delay

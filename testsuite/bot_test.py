@@ -35,7 +35,7 @@ class TestSenderBotMethods(unittest.TestCase):
         """Test send photo."""
         with open("testsuite/logo-ok.png", 'rb') as logo:
             try:
-                self.bot.send_photo(photo=logo, text="testsuite")
+                self.bot.send_photo(photo=logo, caption="testsuite")
             except Exception as err:
                 self.fail(err)
 
