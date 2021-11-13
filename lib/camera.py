@@ -49,7 +49,8 @@ class Camera:
         except subprocess.CalledProcessError as err:
             print(F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}')
             raise SystemError from subprocess.CalledProcessError
-        return video_converted
+        else:
+            return video_converted
 
     def take_photo(self):
         """
