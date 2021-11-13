@@ -45,10 +45,11 @@ class Camera:
         """
         command = F"MP4Box -add {h264} {mp4}"
         try:
-            subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+            video_converted = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
             print(F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}')
             raise SystemError from subprocess.CalledProcessError
+        return video_converted
 
     def take_photo(self):
         """
