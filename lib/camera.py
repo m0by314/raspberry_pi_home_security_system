@@ -30,10 +30,11 @@ class Camera:
         time.sleep(int(delay))
         self.__camera.stop_recording()
 
-        return self.__convert_h264_to_mp4(video_h264, video_mp4)
+        # convert video at mp4 format
+        self.__convert_h264_to_mp4(video_h264, video_mp4)
+        return video_mp4
 
-    @staticmethod
-    def __convert_h264_to_mp4(h264, mp4):
+    def __convert_h264_to_mp4(self, h264, mp4):
         """
         Converted the video format h264 in mp4.
 
@@ -41,7 +42,24 @@ class Camera:
         """
         command = F"MP4Box -add {h264} {mp4}"
         try:
-            return subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+            subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+        except subprocess.CalledProcessError as err:
+            print(F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}')
+            raise OSError from subprocess.CalledProcessError
+
+        # remove h264 file after convert to mp4 format
+        self._remove_file(h264)
+
+    @staticmethod
+    def _remove_file(file):
+        """
+        Remove a specific file
+
+        :raise OSError
+        """
+        remove_cmd = F"rm {file}"
+        try:
+            subprocess.check_output(remove_cmd, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
             print(F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}')
             raise OSError from subprocess.CalledProcessError
