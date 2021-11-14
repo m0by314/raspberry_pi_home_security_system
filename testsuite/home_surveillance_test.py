@@ -22,6 +22,11 @@ class TestHomeSurveillance(unittest.TestCase):
         self.app.is_interrupted
         self.assertFalse(self.app.is_interrupted, F"The attribute \"interrupted\" must be to False instead of {self.app.is_interrupted}")
 
+    def test_signal_handler(self):
+        """test signal handler method."""
+        self.app._signal_handler()
+        self.assertTrue(self.app.is_interrupted, F"Method _signal_handler() must be return True instead of {self.app.is_interrupted}")
+
     def test_start(self):
         """Test start."""
         self.app.start()

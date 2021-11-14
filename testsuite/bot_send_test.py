@@ -7,13 +7,15 @@ import telegram
 from config import TOKEN_ID, CHAT_ID
 
 
+if TOKEN_ID == 'Your_token_id':
+    print("Your token_id is not defined in config.py")
+    sys.exit(1)
+
+
 class TestBotMethods(unittest.TestCase):
     """Test Bot"""
     @classmethod
     def setUpClass(cls) -> None:
-        if TOKEN_ID == 'Your_token_id':
-            print("Your token_id is not defined in config.py")
-            sys.exit(1)
         cls.bot = telegram.Bot(TOKEN_ID)
         cls.chat_id = CHAT_ID
 
