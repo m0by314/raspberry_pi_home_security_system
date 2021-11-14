@@ -114,7 +114,7 @@ def video(update: Update, context: CallbackContext) -> None:
     # Start video recording
     try:
         with open(camera.start_recording(duration), 'rb') as video_file:
-            context.bot.send_message(chat_id=CHAT_ID, video=video_file)
+            context.bot.send_video(chat_id=CHAT_ID, video=video_file)
     except OSError as err:
         context.bot.send_message(chat_id=CHAT_ID, text=str(err))
 
