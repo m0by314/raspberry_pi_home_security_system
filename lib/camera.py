@@ -3,8 +3,6 @@ import subprocess
 import time
 import os
 
-from picamera import PiCamera
-
 
 class Camera:
     """
@@ -13,49 +11,58 @@ class Camera:
 
     :param folder: allows you to define the folder where the records are stored.
     """
-
-    def __init__(self, folder):
-        self.camera = PiCamera()
-        self.registration_folder = os.path.abspath(folder)
-        self.record = {}
+    def __init__(self, camera, folder: str):
+        self.__camera = camera
+        self.__registration_folder = os.path.abspath(folder)
 
     def start_recording(self, delay=60):
         """
         Starts recording the video for a time defined by a delay parameter.
 
         :param delay: recording time
-        :return: dictionary containing the name of the video and the return code of the recording.
+        :return: video at mp4 format
         """
-        video_h264 = os.path.join(self.registration_folder,
+        video_h264 = os.path.join(self.__registration_folder,
                                   'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.h264')
-        video_mp4 = os.path.join(self.registration_folder,
+        video_mp4 = os.path.join(self.__registration_folder,
                                  'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.mp4')
-        self.camera.start_recording(video_h264)
+        self.__camera.start_recording(video_h264)
         time.sleep(int(delay))
-        self.camera.stop_recording()
+        self.__camera.stop_recording()
 
-        error = self.__convert_h264_to_mp4(video_h264, video_mp4)
-        self.record = {
-            "name": video_mp4,
-            "error": error,
-        }
-        return self.record
+        # convert video at mp4 format
+        self.__convert_h264_to_mp4(video_h264, video_mp4)
+        return video_mp4
 
-    @staticmethod
-    def __convert_h264_to_mp4(h264, mp4):
+    def __convert_h264_to_mp4(self, h264, mp4):
         """
-        Converted the video format h264 in mp4.
+        Converted video format h264 in mp4.
 
-        :return: error message if conversion is in fail or None
+        :raise: OSError
         """
         command = F"MP4Box -add {h264} {mp4}"
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
-            error = F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}'
-            return error
-        else:
-            return None
+            print(F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}')
+            raise OSError from subprocess.CalledProcessError
+
+        # remove h264 file after convert to mp4 format
+        self._remove_file(h264)
+
+    @staticmethod
+    def _remove_file(file):
+        """
+        Remove a specific file
+
+        :raise OSError
+        """
+        remove_cmd = F"rm {file}"
+        try:
+            subprocess.check_output(remove_cmd, stderr=subprocess.STDOUT, shell=True)
+        except subprocess.CalledProcessError as err:
+            print(F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}')
+            raise OSError from subprocess.CalledProcessError
 
     def take_photo(self):
         """
@@ -63,26 +70,26 @@ class Camera:
 
         :return: photo at format .jpeg
         """
-        photo = os.path.join(self.registration_folder, 'photo-' +
+        photo = os.path.join(self.__registration_folder, 'photo-' +
                              time.strftime("%H%M%S-%Y%m%d") + '.jpeg')
-        self.camera.capture(photo)
+        self.__camera.capture(photo)
         return photo
-
-    def __del__(self):
-        self.camera.close()
 
     def purge_records(self):
         """
         Deletes records from the folder.
 
-        :return: deletion result
+        :return: string result
+        :raise: OSError
         """
-        command = "cd " + self.registration_folder + " && rm -f *"
+        command = "cd " + self.__registration_folder + " && rm -f *"
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
-            result = F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}'
-            return result
+            print(F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}')
+            raise OSError from subprocess.CalledProcessError
         else:
-            result = 'The records have been deleted'
-            return result
+            return str('The records have been deleted')
+
+    def __del__(self):
+        self.__camera.close()
