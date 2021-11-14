@@ -11,21 +11,17 @@ class Camera:
 
     :param folder: allows you to define the folder where the records are stored.
     """
-    def __init__(self, camera, folder: str, delay: int):
+    def __init__(self, camera, folder: str):
         self.__camera = camera
         self.__registration_folder = os.path.abspath(folder)
-        self.__delay = delay
 
-    def start_recording(self, delay=None):
+    def start_recording(self, delay=60):
         """
         Starts recording the video for a time defined by a delay parameter.
 
         :param delay: recording time
         :return: video at mp4 format
         """
-        if delay is None:
-            delay = self.__delay
-
         video_h264 = os.path.join(self.__registration_folder,
                                   'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.h264')
         video_mp4 = os.path.join(self.__registration_folder,
@@ -45,12 +41,10 @@ class Camera:
         """
         command = F"MP4Box -add {h264} {mp4}"
         try:
-            video_converted = subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
+            return subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
             print(F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}')
-            raise SystemError from subprocess.CalledProcessError
-        else:
-            return video_converted
+            raise OSError from subprocess.CalledProcessError
 
     def take_photo(self):
         """
@@ -75,7 +69,7 @@ class Camera:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
             print(F'FAIL:\ncmd:{err.cmd}\noutput:{err.output}')
-            raise SystemError from subprocess.CalledProcessError
+            raise OSError from subprocess.CalledProcessError
         else:
             return str('The records have been deleted')
 

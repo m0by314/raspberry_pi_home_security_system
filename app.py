@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 """ Home surveillance application """
 import sys
+import re
+import signal
+import time
 from functools import wraps
 
 from picamera import PiCamera
@@ -11,25 +14,21 @@ from telegram.ext import (
     CallbackContext,
 )
 
-from config import TOKEN_ID, REGISTRATION_FOLDER, VIDEO_TIME, CHAT_ID
+from config import TOKEN_ID, REGISTRATION_FOLDER, CHAT_ID, VIDEO_TIME
 
 from lib.pir import motion_detected
 from lib.camera import Camera
-from lib.bot import SenderBot
 from lib.home_surveillance import HomeSurveillance
 
 
-# Create an instance of the telegram.Bot
-telegram_bot = Bot(token=TOKEN_ID)
-
-# Create an instance for the SenderBot
-sender_bot = SenderBot(telegram_bot, CHAT_ID)
-
-# Create an instance of the camera
-camera = Camera(PiCamera(), REGISTRATION_FOLDER, VIDEO_TIME)
+# Create an instance of the telegram bot
+bot = Bot(token=TOKEN_ID)
 
 # Create an instance of HomeSurveillance
-surveillance = HomeSurveillance(camera, sender_bot, motion_detected)
+surveillance = HomeSurveillance()
+
+# Create an instance of the camera
+camera = Camera(PiCamera(), REGISTRATION_FOLDER)
 
 
 def restricted(func):
@@ -81,7 +80,7 @@ def man(update: Update, context: CallbackContext) -> None:
     usage += "\t/status  : show the status of the monitoring system \n"
     usage += "\t/photo : take a picture\n"
     usage += "\t/video time=<duration> : records a video, \
-                by default duration is " + str(VIDEO_TIME) + "s \n"
+                by default duration is 60s \n"
     usage += "\t/clean : remove all files in video folder\n"
     usage += "\t/help  : show help\n"
     context.bot.send_message(chat_id=CHAT_ID, text=usage)
@@ -105,7 +104,10 @@ def video(update: Update, context: CallbackContext) -> None:
     if context.args:
         key, value = context.args[0].split('=')
         if key == 'time':
-            duration = value
+            if re.match(r'd+', value):
+                duration = value
+            else:
+                context.bot.send_message(chat_id=CHAT_ID, text=F"{value} duration of the video not correct")
         else:
             context.bot.send_message(chat_id=CHAT_ID, text=F"Argument {key} not recognized")
 
@@ -113,8 +115,8 @@ def video(update: Update, context: CallbackContext) -> None:
     try:
         with open(camera.start_recording(duration), 'rb') as video_file:
             context.bot.send_message(chat_id=CHAT_ID, video=video_file)
-    except SystemError as err:
-        context.bot.send_message(chat_id=CHAT_ID, text=err)
+    except OSError as err:
+        context.bot.send_message(chat_id=CHAT_ID, text=str(err))
 
 
 @restricted
@@ -122,8 +124,8 @@ def clean(update: Update, context: CallbackContext) -> None:
     """ command /clean: remove file in REGISTRATION_FOLDER """
     try:
         context.bot.send_message(chat_id=CHAT_ID, text=camera.purge_records())
-    except SystemError as err:
-        context.bot.send_message(chat_id=CHAT_ID, text=err)
+    except OSError as err:
+        context.bot.send_message(chat_id=CHAT_ID, text=str(err))
 
 
 def main() -> None:
@@ -148,14 +150,22 @@ def main() -> None:
 
     # Infinite loop, if a motion is detected and surveillance is start
     # a video recording is taken and sent through the telegram bot.
-    surveillance.run_loop()
+    while True:
+        if surveillance.is_start and motion_detected:
+            try:
+                with open(camera.start_recording(VIDEO_TIME), 'rb') as video_file:
+                    bot.send_video(chat_id=CHAT_ID, video=video_file)
+            except OSError as err:
+                bot.send_message(chat_id=CHAT_ID, text=str(err))
 
-    # When the loop is stop, the bot is stop before exit
+        if surveillance.is_interrupted:
+            break
+
+        time.sleep(1)
+
     print("Stop the bot")
     updater.stop()
 
-    print("Exit")
-    sys.exit(0)
 
 
 if __name__ == '__main__':

@@ -11,25 +11,25 @@ class TestHomeSurveillance(unittest.TestCase):
     """Test HomeSurveillance class"""
     @classmethod
     def setUpClass(cls) -> None:
-        cls.home_sur = HomeSurveillance(camera=None, bot=None, motion_detector=None)
+        cls.app = HomeSurveillance()
 
     def test_is_start(self):
-        """Test after init:  is_start = False."""
-        self.assertFalse(self.home_sur.is_start, "Error after __init__ is_start must return False")
+        """Test after init:  is_start -> False."""
+        self.assertFalse(self.app.is_start, "Error the attribute \"is_start\" must be to False at instantiation")
 
-    def test_loop_is_run(self):
-        """Test after init:  loop_is_run -> True"""
-        self.assertTrue(self.home_sur.loop_is_run, "Error after __init__ loop_is_run must return True")
+    def test_is_interrupted(self):
+        """Test after init:  interrupted -> True"""
+        self.assertTrue(self.app.is_interrupted, "Error the attribute \"interrupted\" must be to True at instantiation")
 
     def test_start(self):
         """Test start."""
-        self.home_sur.start()
-        self.assertTrue(self.home_sur.is_start, "Method start() doesn't work!")
+        self.app.start()
+        self.assertTrue(self.app.is_start, "Method start() doesn't work!")
 
     def test_stop(self):
         """Test stop."""
-        self.home_sur.stop()
-        self.assertFalse(self.home_sur.is_start, "Method stop() doesn't work!")
+        self.app.stop()
+        self.assertFalse(self.app.is_start, "Method stop() doesn't work!")
 
 
 if __name__ == '__main__':

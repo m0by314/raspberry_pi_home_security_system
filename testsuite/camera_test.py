@@ -9,7 +9,6 @@ site.addsitedir('..')
 from lib.camera import Camera
 
 REGISTRATION_FOLDER = "testsuite/video"
-VIDEO_TIME = 60
 
 pi_camera = PiCamera()
 
@@ -20,7 +19,7 @@ class TestCamera(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """Initialize camera"""
-        cls.camera = Camera(pi_camera, REGISTRATION_FOLDER, VIDEO_TIME)
+        cls.camera = Camera(pi_camera, REGISTRATION_FOLDER)
 
     def setUp(self) -> None:
         """Create file in REGISTRATION_FOLDER"""
@@ -34,7 +33,7 @@ class TestCamera(unittest.TestCase):
         """Test method camera.start_recording()"""
         try:
             self.camera.start_recording(10)
-        except SystemError as err:
+        except OSError as err:
             self.fail(err)
 
     def test_take_photo(self):
@@ -48,7 +47,7 @@ class TestCamera(unittest.TestCase):
         """Test method camera.purge_records()"""
         try:
             self.camera.purge_records()
-        except SystemError as err:
+        except OSError as err:
             self.fail(err)
 
 
