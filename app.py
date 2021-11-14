@@ -167,6 +167,5 @@ def main() -> None:
     updater.stop()
 
 
-
 if __name__ == '__main__':
     main()
