@@ -2,7 +2,6 @@
 """ Home surveillance application """
 import sys
 import re
-import signal
 import time
 from functools import wraps
 
@@ -114,7 +113,7 @@ def video(update: Update, context: CallbackContext) -> None:
     # Start video recording
     try:
         with open(camera.start_recording(duration), 'rb') as video_file:
-            context.bot.send_video(chat_id=CHAT_ID, video=video_file)
+            context.bot.send_video(chat_id=CHAT_ID, video=video_file, caption="Motion Detected")
     except OSError as err:
         context.bot.send_message(chat_id=CHAT_ID, text=str(err))
 
@@ -151,7 +150,7 @@ def main() -> None:
     # Infinite loop, if a motion is detected and surveillance is start
     # a video recording is taken and sent through the telegram bot.
     while True:
-        if surveillance.is_start and motion_detected:
+        if surveillance.is_start and motion_detected():
             try:
                 with open(camera.start_recording(VIDEO_TIME), 'rb') as video_file:
                     bot.send_video(chat_id=CHAT_ID, video=video_file)
@@ -167,6 +166,7 @@ def main() -> None:
     updater.stop()
     print('Exit')
     sys.exit(0)
+
 
 if __name__ == '__main__':
     main()

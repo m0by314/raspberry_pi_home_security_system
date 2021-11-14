@@ -3,9 +3,15 @@ import signal
 
 
 class HomeSurveillance:
-    """Class to interact with the Home Surveillance"""
+    """
+    Class to keep the specific status required by the application. Avoid the use of \"global\".
+
+    Specific status:
+        _is_start:     if true the intrusion detection is activated
+        _interrupted:  status to stop the infinite loop of motion detection.
+    """
     def __init__(self):
-        # Status of the HomeSurveillance
+        # Status
         self._is_start = False
         self._interrupted = False
 
@@ -20,18 +26,18 @@ class HomeSurveillance:
 
     @property
     def is_interrupted(self) -> bool:
-        """Home Surveillance interrupted"""
+        """Return interrupted status"""
         return self._interrupted
 
     @property
     def is_start(self) -> bool:
-        """Home Surveillance Status."""
+        """Return is_start status."""
         return bool(self._is_start)
 
     def start(self):
-        """Home Surveillance Start."""
+        """Start intrusion detection."""
         self._is_start = True
 
     def stop(self):
-        """Home Surveillance Stop."""
+        """Stop intrusion detection."""
         self._is_start = False

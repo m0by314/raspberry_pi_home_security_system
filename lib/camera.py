@@ -36,7 +36,7 @@ class Camera:
 
     def __convert_h264_to_mp4(self, h264, mp4):
         """
-        Converted the video format h264 in mp4.
+        Converted video format h264 in mp4.
 
         :raise: OSError
         """
@@ -79,7 +79,7 @@ class Camera:
         """
         Deletes records from the folder.
 
-        :return: deletion result
+        :return: string result
         :raise: OSError
         """
         command = "cd " + self.__registration_folder + " && rm -f *"

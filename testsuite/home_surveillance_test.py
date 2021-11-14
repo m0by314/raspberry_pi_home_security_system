@@ -15,21 +15,23 @@ class TestHomeSurveillance(unittest.TestCase):
 
     def test_is_start(self):
         """Test after init:  is_start -> False."""
-        self.assertFalse(self.app.is_start, "Error the attribute \"is_start\" must be to False at instantiation")
+        is_start = self.app.is_start
+        self.assertFalse(is_start, F"The attribute \"is_start\" must be to False instead of {is_start}")
 
     def test_is_interrupted(self):
         """Test after init:  interrupted -> True"""
-        self.assertTrue(self.app.is_interrupted, "Error the attribute \"interrupted\" must be to True at instantiation")
+        is_interrupted = self.app.is_interrupted
+        self.assertTrue(is_interrupted, F"The attribute \"interrupted\" must be to True instead of {is_interrupted}")
 
     def test_start(self):
         """Test start."""
-        self.app.start()
-        self.assertTrue(self.app.is_start, "Method start() doesn't work!")
+        start = self.app.start()
+        self.assertTrue(start, F"Method start() must return True instead of {start}")
 
     def test_stop(self):
         """Test stop."""
-        self.app.stop()
-        self.assertFalse(self.app.is_start, "Method stop() doesn't work!")
+        stop = self.app.stop()
+        self.assertFalse(stop, F"Method stop() must return True instead of {stop}")
 
 
 if __name__ == '__main__':
