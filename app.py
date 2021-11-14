@@ -99,15 +99,15 @@ def video(update: Update, context: CallbackContext) -> None:
     Command /video: record a video
     Takes an argument named time, corresponds to the duration of the video
     """
-    duration = None
+    duration = VIDEO_TIME
     # Parse args to get duration value
     if context.args:
         key, value = context.args[0].split('=')
         if key == 'time':
-            if re.match(r'd+', value):
+            if re.match(r'\d+', value):
                 duration = value
             else:
-                context.bot.send_message(chat_id=CHAT_ID, text=F"{value} duration of the video not correct")
+                context.bot.send_message(chat_id=CHAT_ID, text=F"Duration of the video not correct: {value}")
         else:
             context.bot.send_message(chat_id=CHAT_ID, text=F"Argument {key} not recognized")
 
@@ -165,7 +165,8 @@ def main() -> None:
 
     print("Stop the bot")
     updater.stop()
-
+    print('Exit')
+    sys.exit(0)
 
 if __name__ == '__main__':
     main()

@@ -37,7 +37,7 @@ class Camera:
         """
         Converted the video format h264 in mp4.
 
-        :raise: SystemError
+        :raise: OSError
         """
         command = F"MP4Box -add {h264} {mp4}"
         try:
@@ -62,7 +62,7 @@ class Camera:
         Deletes records from the folder.
 
         :return: deletion result
-        :raise: SystemError
+        :raise: OSError
         """
         command = "cd " + self.__registration_folder + " && rm -f *"
         try:
