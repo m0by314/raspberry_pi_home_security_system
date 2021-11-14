@@ -116,7 +116,10 @@ def video(update: Update, context: CallbackContext) -> None:
             if re.match(r'\d+', value):
                 duration = value
             else:
-                context.bot.send_message(chat_id=CHAT_ID, text=F"Duration of the video not correct: {value}")
+                context.bot.send_message(
+                    chat_id=CHAT_ID,
+                    text=F"Duration of the video not correct: {value}"
+                )
         else:
             context.bot.send_message(chat_id=CHAT_ID, text=F"Argument {key} not recognized")
 
