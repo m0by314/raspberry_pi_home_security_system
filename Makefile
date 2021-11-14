@@ -75,7 +75,7 @@ test: check_token_id
 	echo "---   Testing   ---"; \
 	echo "-------------------"; \
 	sudo systemctl stop ${SERVICE_NAME}; \
-	python3 -m pytest --tb=line testsuite/*_test.py; \
+	python3 -m unittest testsuite/*_test.py; \
 	sudo systemctl start ${SERVICE_NAME}; \
 
 clean: clean-deps
