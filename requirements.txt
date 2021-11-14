@@ -1,4 +1,5 @@
 python-telegram-bot==13.7
 RPi.GPIO==0.7.0
 gpiozero==1.5.0
-picamera==1.13ß
+picamera==1.13
+
