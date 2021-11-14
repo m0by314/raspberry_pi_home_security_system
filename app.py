@@ -20,6 +20,9 @@ from lib.camera import Camera
 from lib.home_surveillance import HomeSurveillance
 
 
+#################
+# Instantiation #
+#################
 # Create an instance of the telegram bot
 bot = Bot(token=TOKEN_ID)
 
@@ -28,6 +31,11 @@ surveillance = HomeSurveillance()
 
 # Create an instance of the camera
 camera = Camera(PiCamera(), REGISTRATION_FOLDER)
+
+
+###########
+# Utility #
+###########
 
 
 def restricted(func):
@@ -97,6 +105,8 @@ def video(update: Update, context: CallbackContext) -> None:
     """
     Command /video: record a video
     Takes an argument named time, corresponds to the duration of the video
+
+    example: /video time=30 for take a video of 30s
     """
     duration = VIDEO_TIME
     # Parse args to get duration value
