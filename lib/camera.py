@@ -12,8 +12,8 @@ class Camera:
     :param folder: allows you to define the folder where the records are stored.
     """
     def __init__(self, camera, folder: str):
-        self.__camera = camera
-        self.__registration_folder = os.path.abspath(folder)
+        self._camera = camera
+        self._registration_folder = os.path.abspath(folder)
 
     def start_recording(self, delay=60):
         """
@@ -22,19 +22,19 @@ class Camera:
         :param delay: recording time
         :return: video at mp4 format
         """
-        video_h264 = os.path.join(self.__registration_folder,
+        video_h264 = os.path.join(self._registration_folder,
                                   'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.h264')
-        video_mp4 = os.path.join(self.__registration_folder,
+        video_mp4 = os.path.join(self._registration_folder,
                                  'vid-' + time.strftime("%H%M%S-%Y%m%d") + '.mp4')
-        self.__camera.start_recording(video_h264)
+        self._camera.start_recording(video_h264)
         time.sleep(int(delay))
-        self.__camera.stop_recording()
+        self._camera.stop_recording()
 
         # convert video at mp4 format
-        self.__convert_h264_to_mp4(video_h264, video_mp4)
+        self._convert_h264_to_mp4(video_h264, video_mp4)
         return video_mp4
 
-    def __convert_h264_to_mp4(self, h264, mp4):
+    def _convert_h264_to_mp4(self, h264, mp4):
         """
         Converted video format h264 in mp4.
 
@@ -70,9 +70,9 @@ class Camera:
 
         :return: photo at format .jpeg
         """
-        photo = os.path.join(self.__registration_folder, 'photo-' +
+        photo = os.path.join(self._registration_folder, 'photo-' +
                              time.strftime("%H%M%S-%Y%m%d") + '.jpeg')
-        self.__camera.capture(photo)
+        self._camera.capture(photo)
         return photo
 
     def purge_records(self):
@@ -82,7 +82,7 @@ class Camera:
         :return: string result
         :raise: OSError
         """
-        command = "cd " + self.__registration_folder + " && rm -f *"
+        command = "cd " + self._registration_folder + " && rm -f *"
         try:
             subprocess.check_output(command, stderr=subprocess.STDOUT, shell=True)
         except subprocess.CalledProcessError as err:
@@ -92,4 +92,4 @@ class Camera:
             return str('The records have been deleted')
 
     def __del__(self):
-        self.__camera.close()
+        self._camera.close()
