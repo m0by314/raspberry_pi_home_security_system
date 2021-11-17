@@ -86,8 +86,9 @@ def man(update: Update, context: CallbackContext) -> None:
     usage += "\t/stop  : stop the home monitoring system\n"
     usage += "\t/status  : show the status of the monitoring system \n"
     usage += "\t/photo : take a picture\n"
-    usage += "\t/video time=<duration> : records a video, \
-                by default duration is " + VIDEO_TIME + "s \n"
+    usage += "\t/video time=<duration> : records a video, by default duration is " \
+             + str(VIDEO_TIME) \
+             + "s \n"
     usage += "\t/clean : remove all files in video folder\n"
     usage += "\t/help  : show help\n"
     context.bot.send_message(chat_id=CHAT_ID, text=usage)
