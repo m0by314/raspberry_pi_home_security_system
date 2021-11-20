@@ -1,13 +1,11 @@
-"""
-configuration file
-"""
+""" Configuration file """
 
 # Variable to configure
 TOKEN_ID = 'Your token_id'
 CHAT_ID = 'Your chat_id'
 
-# Variable that can be modified
-VIDEO_TIME = 60  # duration of video recording in second
+# Default duration for video recording in seconds
+VIDEO_TIME = 60
 
-# Don't modify this !!!
-REGISTRATION_FOLDER = 'tmp/video'  # video recording folder
+# Path of the folder where the videos and photos are stored
+REGISTRATION_FOLDER = 'tmp/video'

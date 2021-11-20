@@ -1,5 +1,5 @@
 # Home security system with Raspberry Pi and sending notifications with a Telegram bot 
-[![CI](https://github.com/m0by314/Raspberry_Pi_home_security_system/workflows/CI/badge.svg?event=push)](https://github.com/m0by314/Raspberry_Pi_home_security_system/actions?query=workflow%3ACI)
+[![Linter](https://github.com/m0by314/Raspberry_Pi_home_security_system/workflows/CI/badge.svg?event=push)](https://github.com/m0by314/Raspberry_Pi_home_security_system/actions?query=workflow%3ACI)
 
 Tutorial to build a home security system with Raspberry Pi and sending notifications with a Telegram bot.
 
@@ -22,14 +22,7 @@ Tutorial to build a home security system with Raspberry Pi and sending notificat
 
 ![image](img/pir-diagram.png)
 
-## Setting up the camera hardware
-```
-sudo raspi-config nonint do_camera 0
-```
-After this action reboot the raspberry
-
 ## Setup
-   
  * Open the `config.py` file and configure the TOKEN_ID and CHAT_ID variables with your token_id and your chat_id  
  ```
      # Variable to configure
@@ -39,18 +32,20 @@ After this action reboot the raspberry
 
 ### Installing 
 
-Before installing set your token_id then:
+The installation requires root rights:
+
+**A reboot will be done at the end of the installation to activate the camera hardware**
 ```
 sudo make install
 ```
 
 ### Bot's commands
 
-* /start  : start the home monitoring system 
-* /stop   : stop the home monitoring system  
-* /status : show the status of the monitoring system 
+* /start  : start the home surveillance  
+* /stop   : stop the home surveillance  
+* /status : show the status of home surveillance  
 * /photo  : take a picture 
-* /video < delay > :  records a video, by default delay is 60s 
+* /video time=<duration> :  records a video, by default delay is 60s 
 * /clean  : remove all files in video folder
 * /temp   : CPU Temperature
 * /reboot : Reboot RPi
@@ -61,12 +56,7 @@ sudo make install
 
   * By default, the duration of the video is set to 60s. If you want change this, you need to modify the VIDEO_TIME constant in `config.py`    		
 
-  * It's possible to add other commands to the bot in `app.py` with the decorator @bot.handler()		
- ```		
- @bot.handler("/hello")		
- def func_hello():		
-     return bot.send_message("Hello World")		
- ```
+  * It's possible to add other commands to the bot in `app.py`
  
 ### Testing
  
@@ -79,9 +69,15 @@ make test
 ```
 sudo make uninstall
 ```
+**A reboot will be done at the end to deactivate the camera hardware**
 
 ## Built With
+### Hardware:
+* Raspberry Pi Zero WH
+* Infrared Camera v2 8MP
+* HC-SR501 PIR Motion Sensor Module
 
+### Libraries:
 * [gpiozero](https://pypi.org/project/gpiozero/)
-* [telepot](https://pypi.org/project/telepot/)  
+* [python-telegram-bot](https://github.com/python-telegram-bot/python-telegram-bot)  
 * [picamera](https://pypi.org/project/picamera/) 
